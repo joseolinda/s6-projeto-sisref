@@ -1,30 +1,29 @@
+name: CI/CD
+
 on:
   push:
-    branches:
-      - main
-name: 🚀 Deploy quando realizar push
+    branches: [ main ]
+
 jobs:
-  web-deploy:
-    name: 🎉 Deploy
+  build:
+
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+
     steps:
-    - name: 🚚 Atualizar código
+    - name: Checkout repository
       uses: actions/checkout@v2
 
-    - name: Use Node.js 16
-      uses: actions/setup-node@v2
+    - name: Set up Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
       with:
-        node-version: '16'
-      
-    - name: 🔨 Build Project
-      run: |
-        npm install
-        npm run build
-    
-    - name: 📂 Sync files
-      uses: SamKirkland/FTP-Deploy-Action@4.2.0
-      with:
-        server: ${{ secrets.ftp_host }}
-        username: ${{ secrets.s6_ftp_user }}
-        password: ${{ secrets.s6_ftp_password }}
-        local-dir: testes/build
+        node-version: ${{ matrix.node-version }}
+
+    - name: Install dependencies
+      run: npm install
+
+    - name: Build
+      run: npm run build
