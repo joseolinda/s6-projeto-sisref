@@ -1,8 +1,8 @@
-name: CI/CD
+name: Deploy no Hostgator
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main ]  
 
 jobs:
   build:
@@ -14,10 +14,10 @@ jobs:
         node-version: [14.x]
 
     steps:
-    - name: Checkout repository
+    - name: 🚚 Atualizar código
       uses: actions/checkout@v2
 
-    - name: Set up Node.js ${{ matrix.node-version }}
+    - name: Definir versão do nove Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
@@ -25,5 +25,14 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Build
+    - name: 🔨 Build Project
       run: CI=false npm run build
+
+    - name: 📂 Sync files
+      uses: SamKirkland/FTP-Deploy-Action@4.2.0
+      with:
+        server: ${{ secrets.ftp_host }}
+        username: ${{ secrets.s6_ftp_user }}
+        password: ${{ secrets.s6_ftp_password }}
+        local-dir: testes/build 
+        publish-dir: ./build
