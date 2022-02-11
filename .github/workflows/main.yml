@@ -34,4 +34,4 @@ jobs:
         server: ${{ secrets.ftp_host }}
         username: ${{ secrets.s6_ftp_user }}
         password: ${{ secrets.s6_ftp_password }}
-        publish-dir: ./build/
+        local-dir: ./build/
