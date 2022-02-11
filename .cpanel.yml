@@ -1,0 +1,5 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home1/joseol93/s6/public/sisref
+    - /bin/cp -a $DEPLOYPATH
