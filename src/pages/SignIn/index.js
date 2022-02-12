@@ -166,7 +166,7 @@ const SignIn = props => {
         <div className={classes.paper}>
         <img
             alt="Logo"
-            src="%PUBLIC_URL%/images/SISREF01.png"
+            src={process.env.PUBLIC_URL + "/images/SISREF01.png"}
           />
           <form onSubmit={handleSignIn} className={classes.form} noValidate>
           <TextField
