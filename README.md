@@ -2,3 +2,4 @@
 
 ## Equipe de Atualização e Manutenção
 * Fernanda
+* Gustavo Samir
