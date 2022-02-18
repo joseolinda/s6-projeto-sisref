@@ -40,7 +40,7 @@ import RegisteredMeals from './pages/Nutritionist/RegisteredMeals';
 import ReportPrint from './pages/Report/ReportPrint';
 
   const Routes = () => (
-    <BrowserRouter basename={process.env.PROCESS_URL}>
+    <BrowserRouter basename={process.env.PUBLIC_URL}>
       <Switch>
         <Redirect
             exact
