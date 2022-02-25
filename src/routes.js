@@ -42,7 +42,7 @@ import ReportPrint from './pages/Report/ReportPrint';
 const BASENAME = new URL(process.env.PUBLIC_URL ?? "/", window.location.href).pathname;
 
   const Routes = () => (
-    <BrowserRouter basename={BASENAME}>
+    <BrowserRouter basename={BASENAME !== window.location.pathname ? BASENAME : undefined}>
       <Switch>
         <Redirect
             exact
