@@ -29,6 +29,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ShareIcon from '@material-ui/icons/Share';
 import Edit from "@material-ui/icons/Edit";
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
+import Autocomplete from '@material-ui/lab/Autocomplete';
 
 
 const useStyles = makeStyles(theme => ({
@@ -395,7 +396,10 @@ const StudentsRepublic = props => {
                 }
                 label="Responsável"
               />
-            <TextField
+            <Autocomplete
+              renderInput={(params) => (
+                <TextField
+                  {...params}
                   fullWidth
                   error={hasError('student_id')}
                   helperText={
@@ -404,20 +408,14 @@ const StudentsRepublic = props => {
                   label="Estudante"
                   margin="dense"
                   name="student_id"
-                  select
-                  SelectProps={{ native: true }}
-                  value={formState.values.student_id}
-                  onChange={handleChangeStudent}
-                  variant="outlined">
-                  <option value={null} ></option>
-                  {students.map(result => (
-                    <option
-                      key={result.id}
-                      value={result.id}>
-                      {result.name}
-                    </option>
-                  ))}
-                </TextField>
+                  variant="outlined"
+                />
+              )}
+              options={students}
+              getOptionLabel={(student) => student.name}
+              value={formState.values.student_id}
+              onChange={(_, student) => handleChangeStudent({ target: { name: 'student_id', value: student.id }})}
+            />
           </DialogContent>
           <DialogActions>
             <Button onClick={handleSaveStudent} color="primary">
