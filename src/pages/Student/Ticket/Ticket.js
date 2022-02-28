@@ -17,7 +17,7 @@ import { withRouter } from "react-router-dom";
 import Swal from "sweetalert2";
 import { DialogQuestione } from "../../../components";
 import api from '../../../services/api';
-import ScheduledMeal from "./ScheduledMeal";
+import ScheduledMeal from "./components/ScheduledMeal";
 
 
 
