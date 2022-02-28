@@ -1,39 +1,25 @@
-import React, {useEffect, useState} from "react";
-import clsx from 'clsx';
-import { withRouter } from "react-router-dom";
-import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/styles';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import PerfectScrollbar from 'react-perfect-scrollbar';
-import HighlightOffIcon from '@material-ui/icons/HighlightOff';
-import FormLabel from '@material-ui/core/FormLabel';
-import api from '../../../services/api';
-import {DialogQuestione} from "../../../components";
-import Swal from "sweetalert2";
-import * as moment from 'moment';
-import 'moment/locale/pt-br';
-import ConfirmationNumberIcon from '@material-ui/icons/ConfirmationNumber';
-import AlarmOnIcon from '@material-ui/icons/AlarmOn';
-import ScheduleIcon from '@material-ui/icons/Schedule';
-import FindInPage from '@material-ui/icons/SearchSharp';
-import {green } from '@material-ui/core/colors';
-
-
 import {
-    Card, Grid,TextField,
-    CardActions,
-    CardContent,
-    LinearProgress,
-    Table, IconButton,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableRow,
-    TablePagination, Tooltip, Button
-  } from '@material-ui/core';
+  Button, Card, CardActions,
+  CardContent,
+  LinearProgress,
+  Table, TableBody,
+  TableCell,
+  TableHead, TablePagination, TableRow, Tooltip
+} from '@material-ui/core';
+import ButtonGroup from '@material-ui/core/ButtonGroup';
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { makeStyles } from '@material-ui/styles';
+import clsx from 'clsx';
+import 'moment/locale/pt-br';
+import PropTypes from 'prop-types';
+import React, { useEffect, useState } from "react";
+import { withRouter } from "react-router-dom";
+import Swal from "sweetalert2";
+import { DialogQuestione } from "../../../components";
+import api from '../../../services/api';
+import ScheduledMeal from "./ScheduledMeal";
+
+
 
   const useStyles = makeStyles((theme) => ({
     root: {},
@@ -46,72 +32,23 @@ import {
       flexDirection: 'column',
       alignItems: 'center',
       '& > *': {
-        margin: theme.spacing(1),
+        marginBlock: theme.spacing(1),
       },
     },
     selectEmpty: {
       marginTop: theme.spacing(2),
     },
-    allow: {
-      width: '90.0px',
-      backgroundColor: '#5DE2A5',
-      //display: 'inline-block',
-      color: '#393A68',
-      textAlign: 'center',
-      height: '70px',
-      boxSizing: 'border-box',
-      border: '1px solid #F2F2F2',
-      minWidth: '80px',
-      padding: '12px',
-      fontWeight: 'bold',
-      fontSize: '14px',
-  },
-    justification: {
-      width: '90.0px',
-      backgroundColor: '#009be5',
-      //display: 'inline-block',
-      color: '#393A68',
-      textAlign: 'center',
-      height: '70px',
-      boxSizing: 'border-box',
-      border: '1px solid #F2F2F2',
-      minWidth: '80px',
-      padding: '12px',
-      fontWeight: 'bold',
-      fontSize: '14px',
-    },
-    notPresent: {
-      width: '90.0px',
-      backgroundColor: '#F5A623',
-      //display: 'inline-block',
-      color: '#393A68',
-      textAlign: 'center',
-      height: '70px',
-      boxSizing: 'border-box',
-      border: '1px solid #F2F2F2',
-      minWidth: '80px',
-      padding: '12px',
-      fontWeight: 'bold',
-      fontSize: '14px',
-    },
-  notAllow: {
-      width: '90.0px',
-      backgroundColor: '#F14D76',
-      //display: 'inline-block',
-      color: '#393A68',
-      textAlign: 'center',
-      height: '70px',
-      boxSizing: 'border-box',
-      border: '1px solid #F2F2F2',
-      minWidth: '80px',
-      padding: '12px',
-      fontWeight: 'bold',
-      fontSize: '14px'
-  },
+    responsiveContent: {
+      [theme.breakpoints.down('md')]: {
+        paddingInline: '8px',
+      }
+    }
   }));
 
 
 const Ticket = props => {
+    const largeButtonGroup = useMediaQuery((theme) => theme.breakpoints.up('sm'));
+    const collapsableCell = useMediaQuery((theme) => theme.breakpoints.down('sm'));
     const { className, history } = props;
     const classes = useStyles();
     const [value, setValue] = React.useState('to-use');
@@ -228,7 +165,7 @@ const Ticket = props => {
             <div className={classes.root}>
                 <div className={classes.grupButton}>
                 <ButtonGroup
-                    size="large"
+                    size={largeButtonGroup ? "large" : "small"}
                     orientation="horizontal"
                     color="primary"
                     variant="contained"
@@ -259,12 +196,11 @@ const Ticket = props => {
             <div className={classes.content}>
                 <Card
                     className={clsx(classes.root, className)}>
-                <CardContent className={classes.content}>
-                    <PerfectScrollbar>
+                <CardContent className={clsx(classes.content, classes.responsiveContent)}>
                         <div className={classes.inner}>
                             {loading === true ?
                             <LinearProgress/>
-                            :setSchedulingsMeal == '' ?
+                            :schedulingsMeal == ''?
                             <Table>
                             <TableBody>
                                 <TableRow key={0}>
@@ -277,75 +213,19 @@ const Ticket = props => {
                             <TableHead>
                                 <TableRow>
                                 <TableCell className={classes.headTable}>Data </TableCell>
-                                <TableCell className={classes.headTable}>Refeição</TableCell>
+                                {!collapsableCell && <TableCell className={classes.headTable}>Refeição</TableCell>}
                                 <TableCell className={classes.headTable}>Cardápio</TableCell>
                                 <TableCell className={classes.headTable}> - </TableCell>
                                 </TableRow>
                             </TableHead>
                             <TableBody>
-                                {value === 'to-use' ?
-                                  schedulingsMeal.map(result => (
-                                  <TableRow key={result.id}>
-                                      <TableCell className={classes.headTable}>{result.date.toString().substr(0, 10).split('-').reverse().join('/')}</TableCell>
-                                      <TableCell className={classes.headTable}>{result.menu ? result.menu.description : "Não Encontrado" }</TableCell>
-                                      <TableCell className={classes.headTable}>{result.meal.description}</TableCell>
-                                      <TableCell className={classes.row}>
-                                        <Tooltip title="Cancelar reserva">
-                                            <IconButton aria-label="Cancelar"
-                                            onClick={() => onClickOpenDialog(result.meal.id, result.date)}
-                                            >
-                                                <HighlightOffIcon  color="error" fontSize="large"/>
-                                            </IconButton>
-                                        </Tooltip>
-                                      </TableCell>
-                                    </TableRow>
-                                  ))
-                                  :value === 'used' ?
-                                    schedulingsMeal.map(result => (
-                                      <TableRow key={result.id}>
-                                          <TableCell className={classes.headTable}>{result.date.toString().substr(0, 10).split('-').reverse().join('/')}</TableCell>
-                                          <TableCell className={classes.headTable}>{result.menu ? result.menu.description : "Não Encontrado" }</TableCell>
-                                          <TableCell className={classes.headTable}>{result.meal.description}</TableCell>
-                                          <TableCell align="center" className={classes.allow}>
-                                            Utilizado
-                                          </TableCell>
-                                        </TableRow>
-                                      ))
-                                  : value === 'no-used' ?
-                                  schedulingsMeal.map(result => (
-                                    <TableRow key={result.id}>
-                                        <TableCell className={classes.headTable}>{result.date.toString().substr(0, 10).split('-').reverse().join('/')}</TableCell>
-                                        <TableCell className={classes.headTable}>{result.menu ? result.menu.description : "Não Encontrado" }</TableCell>
-                                        <TableCell className={classes.headTable}>{result.meal.description}</TableCell>
-                                        {
-                                          result.absenceJustification !== null ?
-                                          <TableCell className={classes.justification}>
-                                            Justificado
-                                          </TableCell>
-                                          :
-                                          <TableCell className={classes.notPresent}>
-                                            Não utilizado
-                                          </TableCell>
-                                        }
-                                        
-                                      </TableRow>
-                                    ))
-                                    :schedulingsMeal.map(result => (
-                                      <TableRow key={result.id}>
-                                          <TableCell className={classes.headTable}>{result.date.toString().substr(0, 10).split('-').reverse().join('/')}</TableCell>
-                                          <TableCell className={classes.headTable}>{result.menu ? result.menu.description : "Não Encontrado" }</TableCell>
-                                          <TableCell className={classes.headTable}>{result.meal.description}</TableCell>
-                                          <TableCell className={classes.notAllow}>
-                                            Cancelado
-                                          </TableCell>
-                                        </TableRow>
-                                      ))
-                                }
+                                {schedulingsMeal.map(result => (
+                                  <ScheduledMeal key={result.id} value={result} filter={value} collapsable={collapsableCell} />
+                                ))}
                             </TableBody>
                             </Table>
                             }
                         </div>
-                    </PerfectScrollbar>
                 </CardContent>
                 <CardActions className={classes.actions}>
                     <TablePagination
