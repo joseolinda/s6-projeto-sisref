@@ -2,8 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import { makeStyles } from '@material-ui/styles';
-import {Button, Typography, Tooltip} from '@material-ui/core';
+import {Button, Typography, Tooltip, Hidden, IconButton} from '@material-ui/core';
 import FindInPage from '@material-ui/icons/SearchSharp';
+import AddStudent from '@material-ui/icons/PersonAdd';
 
 import { SearchInput } from '../../../../../components';
 import {withRouter} from "react-router-dom";
@@ -46,8 +47,20 @@ const StudentToolbar = props => {
       <div className={classes.row}>
         <Typography variant="h5" className={classes.title}>{'Lista de Estudantes'}</Typography>
         <span className={classes.spacer} />
-        <Button variant="contained" color="primary" className={classes.exportButton}
-          onClick={onClickHandleCampus}>Novo estudante</Button>
+        <Hidden smDown>
+          <Button variant="contained" color="primary" className={classes.exportButton}
+            onClick={onClickHandleCampus}>
+                Novo estudante
+          </Button>
+        </Hidden>
+        <Hidden smUp>
+          <Tooltip title="Novo estudante">
+            <Button variant="contained" color="primary" className={classes.exportButton}
+              onClick={onClickHandleCampus}>
+                <AddStudent />
+            </Button>
+          </Tooltip>
+        </Hidden>
       </div>
       <div className={classes.row}>
         <SearchInput
