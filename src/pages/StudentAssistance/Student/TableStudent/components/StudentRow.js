@@ -50,16 +50,30 @@ const StudentRow = (props) => {
     onDelete: onDeleteDefault,
     onEdit: onEditDefault,
   } = props;
-  const [onVerifyHistory, onVerifyPermissions, onDelete, onEdit] = [onVerifyHistoryDefault, onVerifyPermissionsDefault, onDeleteDefault, onEditDefault].map((callback) => function (...args) {
-    if (!history.location.search.includes('query=')) {
-      history.push(history.location.pathname + '?query=' + result.id.toString().padStart(6, '0'));
-    }
+  const [onVerifyHistory, onVerifyPermissions, onDelete, onEdit] = [
+    onVerifyHistoryDefault,
+    onVerifyPermissionsDefault,
+    onDeleteDefault,
+    onEditDefault,
+  ].map(
+    (callback) =>
+      function (...args) {
+        if (!history.location.search.includes("query=")) {
+          history.push(
+            history.location.pathname +
+              "?query=" +
+              result.id.toString().padStart(6, "0")
+          );
+        }
 
-    return callback(...args);
-  });
+        return callback(...args);
+      }
+  );
   const classes = useStyles();
   const responsive = useMediaQuery((theme) => theme.breakpoints.down("sm"));
-  const [collapseOpen, setCollapseOpen] = useState(() => history.location.search.includes('query'));
+  const [collapseOpen, setCollapseOpen] = useState(() =>
+    history.location.search.includes("query")
+  );
 
   return responsive ? (
     <>
@@ -77,7 +91,10 @@ const StudentRow = (props) => {
         </TableCell>
       </TableRow>
       <TableRow>
-        <TableCell colSpan={3} style={{ paddingBlock: 0, backgroundColor: "#f5f5f5" }}>
+        <TableCell
+          colSpan={3}
+          style={{ paddingBlock: 0, backgroundColor: "#f5f5f5" }}
+        >
           <Collapse in={collapseOpen} timeout="auto" unmountOnExit>
             <Table>
               <TableBody>
@@ -90,7 +107,9 @@ const StudentRow = (props) => {
                   </TableCell>
                 </TableRow>
                 <TableRow>
-                  <TableCell component="th" variant="head">E-mail</TableCell>
+                  <TableCell component="th" variant="head">
+                    E-mail
+                  </TableCell>
                   <TableCell className={classes.headTable}>
                     <PerfectScrollbar
                       style={{ maxWidth: "30vw", paddingBlock: "1rem" }}
