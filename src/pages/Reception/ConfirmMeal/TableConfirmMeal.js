@@ -98,11 +98,11 @@ const TableConfirmMeal = props =>{
         }
 
         setDateSearch(dateString);
-
-        loadStudentsconfirmMeal(1);
-
-
     }, []);
+
+    useEffect(() => {
+        loadStudentsconfirmMeal(1);
+    }, [dateSearch]);
 
     useEffect(() => {
         const errors = validate(formState.values);
