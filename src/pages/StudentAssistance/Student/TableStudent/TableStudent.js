@@ -116,8 +116,10 @@ const TableStudent = props => {
   }
 
   useEffect(() => {
+    setSearchText(searchText => new URLSearchParams(history.location.search).get('query') ?? searchText);
+    
     loadStudent(1);
-  }, []);
+  }, [history.location.search]);
 
   const updateSearch = (e) => {
     setSearchText(e.target.value);
