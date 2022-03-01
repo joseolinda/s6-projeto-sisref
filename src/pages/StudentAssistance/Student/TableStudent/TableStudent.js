@@ -75,7 +75,9 @@ const TableStudent = props => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
-  const [searchText, setSearchText] = useState([]);
+  const [searchText, setSearchText] = useState(() => {
+    return new URLSearchParams(history.location.search).get('query') ?? "";
+  });
   const [open, setOpen] = React.useState(false);
   const [idStudentDelete, setIdStudentDelete] = React.useState(0);
   const [loading, setLoading] = useState(false);
@@ -126,6 +128,8 @@ const TableStudent = props => {
   }
 
   const onClickSearch = (e) => {
+    history.push(history.location.pathname + (searchText ? '?query=' + searchText : ''));
+    
     setPage(0);
     loadStudent(1);
   }
