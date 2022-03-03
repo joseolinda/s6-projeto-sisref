@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import {useLocation} from 'react-router-dom';
-import queryString from 'querystring';
 import { makeStyles} from '@material-ui/styles';
 import Swal from "sweetalert2";
 import api from "../../../services/api";
