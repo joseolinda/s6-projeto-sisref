@@ -22,12 +22,6 @@ import StudentToolbar from "./components/StudentToolbar";
 import StudentRow from "./components/StudentRow";
 
 const useStyles = makeStyles(theme => ({
-  container: {
-    [theme.breakpoints.down('sm')]: { 
-      marginBlock: theme.spacing(-6),
-      marginInline: theme.spacing(-4)
-    }
-  },
   root: {
     padding: theme.spacing(2),
   },
@@ -188,7 +182,7 @@ const TableStudent = props => {
   }
 
   return (
-    <div className={classes.container}>
+    <div>
       <div className={classes.root}>
         <StudentToolbar
           onChangeSearch={updateSearch.bind(this)}
