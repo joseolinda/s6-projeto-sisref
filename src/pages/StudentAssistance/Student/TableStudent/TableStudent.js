@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react';
 import clsx from 'clsx';
-import PerfectScrollbar from 'react-perfect-scrollbar';
 import { makeStyles } from '@material-ui/styles';
 import {
   Card,
@@ -12,18 +11,15 @@ import {
   TableCell,
   TableHead,
   TableRow,
-  TablePagination, Tooltip, Button
+  TablePagination, Hidden
 } from '@material-ui/core';
 import api from '../../../../services/api';
 import {DialogQuestione} from "../../../../components";
 import Swal from "sweetalert2";
-import Delete from "@material-ui/icons/Delete";
-import Edit from "@material-ui/icons/Edit";
-import History from "@material-ui/icons/History";
-import Ballot from "@material-ui/icons/BallotOutlined";
 import PropTypes from "prop-types";
 import { withRouter } from 'react-router-dom';
 import StudentToolbar from "./components/StudentToolbar";
+import StudentRow from "./components/StudentRow";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -75,7 +71,9 @@ const TableStudent = props => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [page, setPage] = useState(0);
   const [total, setTotal] = useState(0);
-  const [searchText, setSearchText] = useState([]);
+  const [searchText, setSearchText] = useState(() => {
+    return new URLSearchParams(history.location.search).get('query') ?? "";
+  });
   const [open, setOpen] = React.useState(false);
   const [idStudentDelete, setIdStudentDelete] = React.useState(0);
   const [loading, setLoading] = useState(false);
@@ -118,14 +116,18 @@ const TableStudent = props => {
   }
 
   useEffect(() => {
+    setSearchText(searchText => new URLSearchParams(history.location.search).get('query') ?? searchText);
+    
     loadStudent(1);
-  }, []);
+  }, [history.location.search]);
 
   const updateSearch = (e) => {
     setSearchText(e.target.value);
   }
 
   const onClickSearch = (e) => {
+    history.push(history.location.pathname + (searchText ? '?query=' + searchText : ''));
+    
     setPage(0);
     loadStudent(1);
   }
@@ -191,91 +193,53 @@ const TableStudent = props => {
         <Card
             className={clsx(classes.root, className)}>
           <CardContent className={classes.content}>
-              <PerfectScrollbar>
-                  <div className={classes.inner}>
-                    {loading === true ?
-                      <LinearProgress/>
-                    :students == '' ?
-                      <Table>
-                        <TableBody>
-                            <TableRow key={0}>
-                                <TableCell align="center" colSpan={9} className={classes.headTable}> Nenhum dado foi encontrado para a pesquisa realizada!</TableCell>
-                            </TableRow>
-                        </TableBody>
-                      </Table>
-                    :
-                    <Table>
-                      <TableHead>
-                        <TableRow>
-                          <TableCell style={{fontWeight: 'bold'}}>Cód.</TableCell>
-                          <TableCell style={{fontWeight: 'bold'}}>Matrícula</TableCell>
-                          <TableCell style={{fontWeight: 'bold'}}>Nome</TableCell>
-                          <TableCell style={{fontWeight: 'bold'}}>Email</TableCell>
-                          <TableCell style={{fontWeight: 'bold'}}>Curso</TableCell>
-                          <TableCell style={{fontWeight: 'bold'}}>Validade</TableCell>
-                          <TableCell className={classes.headTable}></TableCell>
-                          <TableCell className={classes.headTable}></TableCell>
-                          <TableCell className={classes.headTable}></TableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {students.map(result => (
-                          <TableRow key={result.id}>
-                            <TableCell className={classes.headTable}>
-                              {
-                                result.id < 10 ? '00000' + result.id :
-                                    result.id < 100 ? '0000' + result.id :
-                                        result.id < 1000 ? '000' + result.id :
-                                            result.id < 10000 ? '00' + result.id :
-                                                result.id < 100000 ? '0' + result.id :
-                                                    result.id
-                              }
-                            </TableCell>
-                            <TableCell className={classes.headTable}>{result.mat}</TableCell>
-                            <TableCell className={classes.headTable}>{result.name}</TableCell>
-                            <TableCell className={classes.headTable}>{result.user[0] ? result.user[0].email : ""}</TableCell>
-                            <TableCell className={classes.headTable}>{result.course ? result.course.initials : ""}</TableCell>
-                            <TableCell className={classes.headTable}>{result.dateValid.toString().substr(0, 10).split('-').reverse().join('/')}</TableCell>
-                            <TableCell className={classes.headTable}>{result.active==1?'Ativo':'Inativo'}</TableCell>
-                            <TableCell className={classes.row}>
-                              <Tooltip title="Verificar histórico de refeições">
-                                <Button
-                                    className={classes.buttonDelete}
-                                    onClick={() => onClickVerifyHistory(result.id)}>
-                                  <History fontSize="medium"/>
-                                </Button>
-                              </Tooltip>
-                              <Tooltip title="Verificar permissões das refeições">
-                                <Button
-                                    className={classes.buttonDelete}
-                                    onClick={() => onClickVerifyAllowMeal(result.id)}>
-                                  <Ballot fontSize="medium"/>
-                                </Button>
-                              </Tooltip>
-                            </TableCell>
-                            <TableCell className={classes.row}>
-                              <Tooltip title="Deletar">
-                                  <Button
-                                      className={classes.buttonDelete}
-                                      onClick={() => onClickOpenDialog(result.id)}>
-                                    <Delete fontSize="medium"/>
-                                  </Button>
-                                </Tooltip>
-                                <Tooltip title="Editar">
-                                  <Button
-                                      className={classes.buttonEdit}
-                                      onClick={() => onClickEdit(result.id)}>
-                                    <Edit fontSize="medium"/>
-                                  </Button>
-                                </Tooltip>
-                              </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                    }
-                  </div>
-              </PerfectScrollbar>
+            <div className={classes.inner}>
+              {loading === true ?
+                <LinearProgress/>
+              :students == '' ?
+                <Table>
+                  <TableBody>
+                      <TableRow key={0}>
+                          <TableCell align="center" colSpan={9} className={classes.headTable}> Nenhum dado foi encontrado para a pesquisa realizada!</TableCell>
+                      </TableRow>
+                  </TableBody>
+                </Table>
+              :
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell style={{fontWeight: 'bold'}}>Cód.</TableCell>
+                    <Hidden smDown>
+                      <TableCell style={{fontWeight: 'bold'}}>Matrícula</TableCell>
+                      <TableCell style={{fontWeight: 'bold'}}>Nome</TableCell>
+                      <TableCell style={{fontWeight: 'bold'}}>Email</TableCell>
+                      <TableCell style={{fontWeight: 'bold'}}>Curso</TableCell>
+                      <TableCell style={{fontWeight: 'bold'}}>Validade</TableCell>
+                      <TableCell className={classes.headTable}></TableCell>
+                      <TableCell className={classes.headTable}></TableCell>
+                      <TableCell className={classes.headTable}></TableCell>
+                    </Hidden>
+                    <Hidden smUp>
+                      <TableCell style={{fontWeight: 'bold'}}>Nome</TableCell>
+                      <TableCell></TableCell>
+                    </Hidden>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {students.map(result => (
+                    <StudentRow
+                      key={result.id}
+                      student={result}
+                      onVerifyHistory={() => onClickVerifyHistory(result.id)}
+                      onVerifyPermissions={() => onClickVerifyAllowMeal(result.id)}
+                      onDelete={() => onClickOpenDialog(result.id)}
+                      onEdit={() => onClickEdit(result.id)}
+                    />
+                  ))}
+                </TableBody>
+              </Table>
+              }
+            </div>
           </CardContent>
           <CardActions className={classes.actions}>
             <TablePagination

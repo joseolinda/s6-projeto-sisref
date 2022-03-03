@@ -67,6 +67,7 @@ const TableConfirmMeal = props =>{
     const [dateSearch, setDateSearch] = React.useState('2020-05-20');
     const [students, setStudents] = React.useState([]);
     const [open, setOpen] = React.useState(false);
+    const campoMatriculaRef = useRef(null);
 
     const [rowsPerPage, setRowsPerPage] = useState(20);
     const [page, setPage] = useState(0);
@@ -97,11 +98,11 @@ const TableConfirmMeal = props =>{
         }
 
         setDateSearch(dateString);
-
-        loadStudentsconfirmMeal(1);
-
-
     }, []);
+
+    useEffect(() => {
+        loadStudentsconfirmMeal(1);
+    }, [dateSearch]);
 
     useEffect(() => {
         const errors = validate(formState.values);
@@ -209,6 +210,8 @@ const TableConfirmMeal = props =>{
         }
     }
 
+    const campoMatricula = campoMatriculaRef.current;
+
     async function onConfirmObject(){
         try {
             const date = dateSearch;
@@ -237,12 +240,16 @@ const TableConfirmMeal = props =>{
                     mat: ""
                 }
             }));
+
+            if (campoMatricula != null) {
+                campoMatricula.focus();
+            }
           }
         } catch (error) {
           loadAlert('error', 'Erro de conexão.');
         }
         setOpen(false);
-      }
+    }
 
 
 
@@ -381,6 +388,10 @@ const TableConfirmMeal = props =>{
                         }}
                         value={formState.values.mat || ""}
                         variant="outlined"
+                        InputProps={{
+                            inputRef: campoMatriculaRef
+                        }}
+
                     />
                 </Grid>
                 <Grid
