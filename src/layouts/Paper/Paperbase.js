@@ -137,8 +137,11 @@ const styles = {
   },
   main: {
     flex: 1,
-    padding: theme.spacing(6, 4),
     background: '#eaeff1',
+    [theme.breakpoints.up('md')]: 
+    {
+      padding: theme.spacing(6, 4),
+    }
   },
   footer: {
     padding: theme.spacing(2),
