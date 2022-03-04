@@ -23,8 +23,7 @@ import StudentRow from "./components/StudentRow";
 
 const useStyles = makeStyles(theme => ({
   root: {
-    paddingLeft: theme.spacing(2),
-    paddingRight: theme.spacing(2)
+    padding: theme.spacing(2),
   },
   content: {
     padding: 0,
@@ -185,64 +184,89 @@ const TableStudent = props => {
   return (
     <div>
       <div className={classes.root}>
-      <StudentToolbar
+        <StudentToolbar
           onChangeSearch={updateSearch.bind(this)}
           searchText={searchText}
-          onClickSearch={onClickSearch}/>
-      <div className={classes.content}>
-        <Card
-            className={clsx(classes.root, className)}>
-          <CardContent className={classes.content}>
-            <div className={classes.inner}>
-              {loading === true ?
-                <LinearProgress/>
-              :students == '' ?
-                <Table>
-                  <TableBody>
+          onClickSearch={onClickSearch}
+        />
+        <div className={classes.content}>
+          <Card className={clsx(classes.root, className)}>
+            <CardContent className={classes.content}>
+              <div className={classes.inner}>
+                {loading === true ? (
+                  <LinearProgress />
+                ) : students == "" ? (
+                  <Table>
+                    <TableBody>
                       <TableRow key={0}>
-                          <TableCell align="center" colSpan={9} className={classes.headTable}> Nenhum dado foi encontrado para a pesquisa realizada!</TableCell>
+                        <TableCell
+                          align="center"
+                          colSpan={9}
+                          className={classes.headTable}
+                        >
+                          {" "}
+                          Nenhum dado foi encontrado para a pesquisa realizada!
+                        </TableCell>
                       </TableRow>
-                  </TableBody>
-                </Table>
-              :
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell style={{fontWeight: 'bold'}}>Cód.</TableCell>
-                    <Hidden smDown>
-                      <TableCell style={{fontWeight: 'bold'}}>Matrícula</TableCell>
-                      <TableCell style={{fontWeight: 'bold'}}>Nome</TableCell>
-                      <TableCell style={{fontWeight: 'bold'}}>Email</TableCell>
-                      <TableCell style={{fontWeight: 'bold'}}>Curso</TableCell>
-                      <TableCell style={{fontWeight: 'bold'}}>Validade</TableCell>
-                      <TableCell className={classes.headTable}></TableCell>
-                      <TableCell className={classes.headTable}></TableCell>
-                      <TableCell className={classes.headTable}></TableCell>
-                    </Hidden>
-                    <Hidden smUp>
-                      <TableCell style={{fontWeight: 'bold'}}>Nome</TableCell>
-                      <TableCell></TableCell>
-                    </Hidden>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {students.map(result => (
-                    <StudentRow
-                      key={result.id}
-                      student={result}
-                      onVerifyHistory={() => onClickVerifyHistory(result.id)}
-                      onVerifyPermissions={() => onClickVerifyAllowMeal(result.id)}
-                      onDelete={() => onClickOpenDialog(result.id)}
-                      onEdit={() => onClickEdit(result.id)}
-                    />
-                  ))}
-                </TableBody>
-              </Table>
-              }
-            </div>
-          </CardContent>
-          <CardActions className={classes.actions}>
-            <TablePagination
+                    </TableBody>
+                  </Table>
+                ) : (
+                  <Table>
+                    <TableHead>
+                      <TableRow>
+                        <TableCell style={{ fontWeight: "bold" }}>
+                          Cód.
+                        </TableCell>
+                        <Hidden smDown>
+                          <TableCell style={{ fontWeight: "bold" }}>
+                            Matrícula
+                          </TableCell>
+                          <TableCell style={{ fontWeight: "bold" }}>
+                            Nome
+                          </TableCell>
+                          <TableCell style={{ fontWeight: "bold" }}>
+                            Email
+                          </TableCell>
+                          <TableCell style={{ fontWeight: "bold" }}>
+                            Curso
+                          </TableCell>
+                          <TableCell style={{ fontWeight: "bold" }}>
+                            Validade
+                          </TableCell>
+                          <TableCell className={classes.headTable}></TableCell>
+                          <TableCell className={classes.headTable}></TableCell>
+                          <TableCell className={classes.headTable}></TableCell>
+                        </Hidden>
+                        <Hidden mdUp>
+                          <TableCell style={{ fontWeight: "bold" }}>
+                            Nome
+                          </TableCell>
+                          <TableCell></TableCell>
+                        </Hidden>
+                      </TableRow>
+                    </TableHead>
+                    <TableBody>
+                      {students.map((result) => (
+                        <StudentRow
+                          key={result.id}
+                          student={result}
+                          onVerifyHistory={() =>
+                            onClickVerifyHistory(result.id)
+                          }
+                          onVerifyPermissions={() =>
+                            onClickVerifyAllowMeal(result.id)
+                          }
+                          onDelete={() => onClickOpenDialog(result.id)}
+                          onEdit={() => onClickEdit(result.id)}
+                        />
+                      ))}
+                    </TableBody>
+                  </Table>
+                )}
+              </div>
+            </CardContent>
+            <CardActions className={classes.actions}>
+              <TablePagination
                 component="div"
                 count={total}
                 onChangePage={handlePageChange}
@@ -250,17 +274,19 @@ const TableStudent = props => {
                 page={page}
                 rowsPerPage={rowsPerPage}
                 rowsPerPageOptions={[10]}
-            />
-          </CardActions>
-        </Card>
-        <DialogQuestione handleClose={onClickCloseDialog}
-          open={open}
-          onClickAgree={onDeleteObject}
-          onClickDisagree={onClickCloseDialog}
-          mesage={'Deseja excluir o aluno selecionado?'}
-          title={'Excluir turno'}/>
+              />
+            </CardActions>
+          </Card>
+          <DialogQuestione
+            handleClose={onClickCloseDialog}
+            open={open}
+            onClickAgree={onDeleteObject}
+            onClickDisagree={onClickCloseDialog}
+            mesage={"Deseja excluir o aluno selecionado?"}
+            title={"Excluir turno"}
+          />
+        </div>
       </div>
-    </div>
     </div>
   );
 };
