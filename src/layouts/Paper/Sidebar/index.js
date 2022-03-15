@@ -31,6 +31,7 @@ import SchoolIcon from '@material-ui/icons/School';
 import ConfirmationNumberIcon from '@material-ui/icons/ConfirmationNumber';
 import ContactsIcon from '@material-ui/icons/Contacts';
 import LaunchIcon from '@material-ui/icons/Launch';
+import { getErrorMessage } from '../../../helpers/error';
 
 const categoriesAdmin = [
     {
@@ -169,7 +170,7 @@ const Sidebar = (props) => {
           const response = await api.get(url);
           setCampus(response.data);
         } catch (error) {
-          loadAlert('error', 'Erro de conexão.');
+          loadAlert('error', getErrorMessage (error));
         }
     }
 

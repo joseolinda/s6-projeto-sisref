@@ -23,6 +23,7 @@ import Edit from "@material-ui/icons/Edit";
 import PropTypes from "prop-types";
 import { withRouter } from 'react-router-dom';
 import MenuToolbar from "./components/MenuToolbar";
+import {getErrorMessage} from "../../../../helpers/error";
 const useStyles = makeStyles(theme => ({
   root: {
     paddingLeft: theme.spacing(2),
@@ -110,7 +111,7 @@ const TableMenu = props => {
       setMenus(response.data.data);
     } catch (error) {
       console.log(error);
-      loadAlert('error', 'Erro de conexão.');
+      loadAlert('error', getErrorMessage (error));
     }
     setLoading(false);
   }
@@ -174,7 +175,7 @@ const TableMenu = props => {
       }
     } catch (error) {
       console.log(error);
-      loadAlert('error', 'Erro de conexão.');
+      loadAlert('error', getErrorMessage (error));
     }
     setOpen(false);
   }

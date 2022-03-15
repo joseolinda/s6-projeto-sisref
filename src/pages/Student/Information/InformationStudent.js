@@ -12,6 +12,7 @@ import React, { useEffect, useState } from 'react';
 import Swal from "sweetalert2";
 import Padding from '../../../components/Padding';
 import api from '../../../services/api';
+import { getErrorMessage } from '../../../helpers/error';
 
 const useStyles = makeStyles((theme) => ({
     root: {},
@@ -102,7 +103,7 @@ const InformationStudent = props => {
       }
     } catch (error) {
       console.log(error);
-      loadAlert('error', 'Erro de conexão.');
+      loadAlert('error', getErrorMessage (error));
     }
   }
 
@@ -129,7 +130,7 @@ const InformationStudent = props => {
           }));
         }
       } catch (error) {
-        loadAlert('error', 'Erro de conexão.');
+        loadAlert('error', getErrorMessage (error));
       }
   }
   useEffect(() => {

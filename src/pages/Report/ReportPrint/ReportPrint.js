@@ -10,7 +10,7 @@ import {
     TableCell, CircularProgress,
     IconButton, Typography, TablePagination, TextField, Grid, Button
 } from '@material-ui/core';
-
+import {getErrorMessage} from "../../../helpers/error";
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -108,7 +108,7 @@ const ReportPrint = props => {
             }
         } catch (error) {
             console.log(error);
-            loadAlert('error', 'Erro de conexão.');
+            loadAlert('error', getErrorMessage (error));
         }
     }
 
@@ -118,7 +118,7 @@ const ReportPrint = props => {
             const response = await api.get(url);
             setMeal(response.data);
         } catch (error) {
-            loadAlert('error', 'Erro de conexão.');
+            loadAlert('error', getErrorMessage (error));
         }
     }
 
@@ -129,7 +129,7 @@ const ReportPrint = props => {
 
             setCourse(response.data);
         } catch (error) {
-            loadAlert('error', 'Erro de conexão.');
+            loadAlert('error', getErrorMessage (error));
         }
     }
 

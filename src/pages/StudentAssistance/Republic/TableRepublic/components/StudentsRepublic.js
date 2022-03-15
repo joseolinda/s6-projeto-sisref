@@ -30,7 +30,7 @@ import ShareIcon from '@material-ui/icons/Share';
 import Edit from "@material-ui/icons/Edit";
 import AddCircleOutlineOutlinedIcon from '@material-ui/icons/AddCircleOutlineOutlined';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-
+import { getErrorMessage } from '../../../../../helpers/error';
 
 const useStyles = makeStyles(theme => ({
   root: {},
@@ -107,7 +107,7 @@ const StudentsRepublic = props => {
       const response = await api.get(url);
       setStudents(response.data);
     } catch (error) {
-      loadAlert('error', 'Erro de conexão.');
+      loadAlert('error', getErrorMessage (error));
     }
   }
 
@@ -121,7 +121,7 @@ const StudentsRepublic = props => {
       setTotal(response.data.total);
       setRepublics(response.data.data);
     } catch (error) {
-      loadAlert('error', 'Erro de conexão.');
+      loadAlert('error', getErrorMessage (error));
     }
   }
 
@@ -150,7 +150,7 @@ const StudentsRepublic = props => {
         }
     }
     }catch (error) {
-      loadAlert('error', 'Erro de conexão.');
+      loadAlert('error', getErrorMessage (error));
     }
     setOpen3(false);
     document.location.reload(true);
@@ -175,7 +175,7 @@ const StudentsRepublic = props => {
         loadRepublic(page+1);
       }
     } catch (error) {
-      loadAlert('error', 'Erro de conexão.');
+      loadAlert('error', getErrorMessage (error));
     }
     setOpen(false);
     stateChange();
@@ -223,7 +223,7 @@ const StudentsRepublic = props => {
       }
     } catch (error) {
       console.log(error);
-      loadAlert('error', 'Erro de conexão.');
+      loadAlert('error', getErrorMessage (error));
     }
     setOpen2(false);
     document.location.reload(true);

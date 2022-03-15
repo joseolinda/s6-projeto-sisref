@@ -25,6 +25,7 @@ import History from "@material-ui/icons/History";
 import PropTypes from "prop-types";
 import { withRouter } from 'react-router-dom';
 import MealToolbar from "./components/MealToolbar";
+import { getErrorMessage } from '../../../../helpers/error';
 const useStyles = makeStyles(theme => ({
   root: {
     paddingLeft: theme.spacing(2),
@@ -112,7 +113,7 @@ const TableMeal = props => {
       setMeals(response.data.data);
     } catch (error) {
       console.log(error);
-      loadAlert('error', 'Erro de conexão.');
+      loadAlert('error', getErrorMessage (error));
     }
     setLoading(false);
   }
@@ -164,7 +165,7 @@ const TableMeal = props => {
       }
     } catch (error) {
       console.log(error);
-      loadAlert('error', 'Erro de conexão.');
+      loadAlert('error', getErrorMessage (error));
     }
     setOpen(false);
   }

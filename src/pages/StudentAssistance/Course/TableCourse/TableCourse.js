@@ -23,6 +23,7 @@ import Edit from "@material-ui/icons/Edit";
 import PropTypes from "prop-types";
 import { withRouter } from 'react-router-dom';
 import CourseToolbar from "./components/CourseToolbar";
+import { getErrorMessage } from '../../../../helpers/error';
 const useStyles = makeStyles(theme => ({
   root: {
     paddingLeft: theme.spacing(2),
@@ -109,7 +110,7 @@ const TableCourse = props => {
       setTotal(response.data.total);
       setCourses(response.data.data);
     } catch (error) {
-      loadAlert('error', 'Erro de conexão.');
+      loadAlert('error', getErrorMessage (error));
     }
     setLoading(false);
   }
@@ -159,7 +160,7 @@ const TableCourse = props => {
         loadCourse(page+1);
       }
     } catch (error) {
-      loadAlert('error', 'Erro de conexão.');
+      loadAlert('error', getErrorMessage (error));
     }
     setOpen(false);
   }

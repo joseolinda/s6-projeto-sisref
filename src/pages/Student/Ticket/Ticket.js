@@ -24,6 +24,7 @@ import Swal from "sweetalert2";
 import { DialogQuestione, Padding } from "../../../components";
 import api from "../../../services/api";
 import ScheduledMeal from "./components/ScheduledMeal";
+import { getErrorMessage } from "../../../helpers/error";
 
 const useStyles = makeStyles((theme) => ({
   root: {},
@@ -105,7 +106,7 @@ const Ticket = (props) => {
       setSchedulingsMeal(response.data.data);
     } catch (error) {
       console.log("erro função", error);
-      loadAlert("error", "Erro de conexão.");
+      loadAlert("error", getErrorMessage (error));
     }
     setLoading(false);
   }
@@ -129,7 +130,7 @@ const Ticket = (props) => {
       }
     } catch (error) {
       console.log(error);
-      loadAlert("error", "Erro de conexão.");
+      loadAlert("error", getErrorMessage (error));
     }
     setOpen(false);
     loadschedulingsMeal(1);

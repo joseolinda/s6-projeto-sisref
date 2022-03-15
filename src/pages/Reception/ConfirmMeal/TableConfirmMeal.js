@@ -15,6 +15,7 @@ import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import AddIcon from '@material-ui/icons/Add';
 import FindInPage from "@material-ui/icons/SearchSharp";
 import { teal,green } from '@material-ui/core/colors';
+import {getErrorMessage} from "../../../helpers/error";
 
 const useStyles = makeStyles(() => ({
     root: {},
@@ -170,7 +171,7 @@ const TableConfirmMeal = props =>{
                 }
             }
         } catch (error) {
-            loadAlert('error', 'Erro de conexão.');
+            loadAlert('error', getErrorMessage (error));
         }
     }
 
@@ -185,7 +186,7 @@ const TableConfirmMeal = props =>{
                 }
             }
         } catch (error) {
-            loadAlert('error', 'Erro de conexão.');
+            loadAlert('error', getErrorMessage (error));
         }
     }
 
@@ -206,7 +207,7 @@ const TableConfirmMeal = props =>{
                 }
             }
         } catch (error) {
-            loadAlert('error', 'Erro de conexão.');
+            loadAlert('error', getErrorMessage (error));
         }
     }
 
@@ -246,7 +247,7 @@ const TableConfirmMeal = props =>{
             }
           }
         } catch (error) {
-          loadAlert('error', 'Erro de conexão.');
+          loadAlert('error', getErrorMessage (error));
         }
         setOpen(false);
     }
