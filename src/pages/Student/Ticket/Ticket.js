@@ -261,6 +261,7 @@ const Ticket = (props) => {
                           value={result}
                           filter={value}
                           collapsable={collapsableCell}
+                          onCancelScheduling = {onClickOpenDialog}
                         />
                       ))}
                     </TableBody>
