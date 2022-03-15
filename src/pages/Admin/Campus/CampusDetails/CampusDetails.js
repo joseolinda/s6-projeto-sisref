@@ -16,6 +16,7 @@ import api from "../../../../services/api";
 import Swal from "sweetalert2";
 import validate from "validate.js";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import { getErrorMessage } from '../../../../helpers/error';
 
 const schema = {
   description: {
@@ -95,7 +96,7 @@ const CampusDetails = props => {
 
     } catch (error) {
       console.log("Erro: "+error);
-      loadAlert('error', 'Erro de conexão.');
+      loadAlert('error', getErrorMessage (error));
     }
   }
 
@@ -117,7 +118,7 @@ const CampusDetails = props => {
         }));
       }
     } catch (error) {
-      loadAlert('error', 'Erro de conexão.');
+      loadAlert('error', getErrorMessage (error));
     }
   }
 

@@ -12,6 +12,7 @@ import Swal from "sweetalert2";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import FindInPage from "@material-ui/icons/SearchSharp";
 import PrintIcon from '@material-ui/icons/Print';
+import {getErrorMessage} from "../../../helpers/error";
 
 const useStyles = makeStyles(() => ({
     root: {},
@@ -133,7 +134,7 @@ const ReportScheduling = props => {
             }
         } catch (error) {
             console.log(error);
-            loadAlert('error', 'Erro de conexão.');
+            loadAlert('error', getErrorMessage (error));
         }
     }
 
@@ -143,7 +144,7 @@ const ReportScheduling = props => {
             const response = await api.get(url);
             setMealsALl(response.data);
         } catch (error) {
-            loadAlert('error', 'Erro de conexão.');
+            loadAlert('error', getErrorMessage (error));
         }
     }
 
@@ -153,7 +154,7 @@ const ReportScheduling = props => {
             const response = await api.get(url);
             setCourse(response.data);
         } catch (error) {
-            loadAlert('error', 'Erro de conexão.');
+            loadAlert('error', getErrorMessage (error));
         }
     }
 

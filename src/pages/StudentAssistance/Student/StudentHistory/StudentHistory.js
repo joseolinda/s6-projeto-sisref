@@ -19,7 +19,7 @@ import Swal from "sweetalert2";
 import AddComment from '@material-ui/icons/AddComment';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import Delete from "@material-ui/icons/Delete";
-
+import { getErrorMessage } from '../../../../helpers/error';
 const useStyles = makeStyles(() => ({
   root: {},
   infoRed: {
@@ -110,7 +110,7 @@ const StudentHistory = props => {
       }
     } catch (error) {
       console.log(error);
-      loadAlert('error', 'Erro de conexão.');
+      loadAlert('error', getErrorMessage (error));
     }
   }
 
@@ -163,7 +163,7 @@ const StudentHistory = props => {
       }
     } catch (error) {
       console.log(error);
-      loadAlert('error', 'Erro de conexão.');
+      loadAlert('error', getErrorMessage (error));
     }
   }
 
@@ -217,7 +217,7 @@ const StudentHistory = props => {
         loadHistoryStudent(page+1);
       }
     } catch (error) {
-      loadAlert('error', 'Erro de conexão.');
+      loadAlert('error', getErrorMessage (error));
     }
     setOpen2(false);
   }

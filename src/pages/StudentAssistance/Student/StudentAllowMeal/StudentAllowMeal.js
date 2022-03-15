@@ -16,6 +16,7 @@ import { Done, Close } from "@material-ui/icons";
 import Edit from "@material-ui/icons/Edit";
 import CloseIcon from '@material-ui/icons/Close';
 import Delete from "@material-ui/icons/Delete";
+import { getErrorMessage } from '../../../../helpers/error';
 
 const useStyles = makeStyles(() => ({
   root: {},
@@ -119,7 +120,7 @@ const StudentAllowMeal = props => {
       }
     } catch (error) {
       console.log(error);
-      loadAlert('error', 'Erro de conexão.');
+      loadAlert('error', getErrorMessage (error));
     }
   }
 
@@ -129,7 +130,7 @@ const StudentAllowMeal = props => {
       const response = await api.get(url);
       setMeals(response.data);
     } catch (error) {
-      loadAlert('error', 'Erro de conexão.');
+      loadAlert('error', getErrorMessage (error));
     }
   }
 
@@ -229,7 +230,7 @@ const StudentAllowMeal = props => {
         }
       }
     } catch (error) {
-      loadAlert('error', 'Erro de conexão.');
+      loadAlert('error', getErrorMessage (error));
     }
   }
 
@@ -246,7 +247,7 @@ const StudentAllowMeal = props => {
         loadAllowMeal();
       }
     } catch (error) {
-      loadAlert('error', 'Erro de conexão.');
+      loadAlert('error', getErrorMessage (error));
     }
     setOpen(false);
   }

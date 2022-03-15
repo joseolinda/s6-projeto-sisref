@@ -17,6 +17,7 @@ import api from "../../../../services/api";
 import Swal from "sweetalert2";
 import validate from "validate.js";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import { getErrorMessage } from '../../../../helpers/error';
 
 const schema = {
     name: {
@@ -103,7 +104,7 @@ const UserDetails = props => {
       const response = await api.get(url);
       setCampus(response.data);
     } catch (error) {
-      loadAlert('error', 'Erro de conexão.');
+      loadAlert('error', getErrorMessage (error));
     }
   }
 
@@ -128,7 +129,7 @@ const UserDetails = props => {
                 }));
             }
         } catch (error) {
-            loadAlert('error', 'Erro de conexão.');
+            loadAlert('error', getErrorMessage (error));
         }
     }
 
@@ -195,7 +196,7 @@ const UserDetails = props => {
 
       } catch (error) {
 
-        loadAlert('error', 'Erro de conexão.');
+        loadAlert('error', getErrorMessage (error));
       }
   }
 
@@ -221,7 +222,7 @@ const UserDetails = props => {
         }));
       }
     } catch (error) {
-      loadAlert('error', 'Erro de conexão.');
+      loadAlert('error', getErrorMessage (error));
     }
   }
 

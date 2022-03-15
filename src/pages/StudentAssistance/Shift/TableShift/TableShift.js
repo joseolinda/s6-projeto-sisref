@@ -23,6 +23,7 @@ import Edit from "@material-ui/icons/Edit";
 import PropTypes from "prop-types";
 import { withRouter } from 'react-router-dom';
 import ShiftToolbar from "./components/ShiftToolbar";
+import { getErrorMessage } from '../../../../helpers/error';
 const useStyles = makeStyles(theme => ({
   root: {
     paddingLeft: theme.spacing(2),
@@ -109,7 +110,7 @@ const TableShift = props => {
       setTotal(response.data.total);
       setShifts(response.data.data);
     } catch (error) {
-      loadAlert('error', 'Erro de conexão.');
+      loadAlert('error', getErrorMessage (error));
     }
     setLoading(false);
   }
@@ -159,7 +160,7 @@ const TableShift = props => {
         loadShift(page+1);
       }
     } catch (error) {
-      loadAlert('error', 'Erro de conexão.');
+      loadAlert('error', getErrorMessage (error));
     }
     setOpen(false);
   }

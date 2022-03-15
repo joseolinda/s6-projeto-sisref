@@ -11,6 +11,7 @@ import {
 } from '@material-ui/core';
 import api from '../../services/api';
 import Swal from 'sweetalert2';
+import {getErrorMessage} from "../../helpers/error";
 
 const schema = {
   email: {
@@ -189,7 +190,7 @@ const ResetPassword = props => {
         history.push('/');
       }
     } catch (error) {
-      loadAlert('error', 'Erro de conexão.');
+      loadAlert('error', getErrorMessage (error));
     }
   }
 

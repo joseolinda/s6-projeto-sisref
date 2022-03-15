@@ -14,6 +14,7 @@ import {
 import Swal from "sweetalert2";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import FindInPage from "@material-ui/icons/SearchSharp";
+import {getErrorMessage} from "../../../helpers/error";
 
 const useStyles = makeStyles(() => ({
     root: {},
@@ -115,7 +116,7 @@ const RegisteredMeals = props =>{
                 loadAlert('success', 'Consulta efetuada.');
               }
         } catch (error) {
-            loadAlert('error', 'Erro de conexão.');
+            loadAlert('error', getErrorMessage (error));
         }
     }
 
@@ -130,7 +131,7 @@ const RegisteredMeals = props =>{
                 }
             } 
         } catch (error) {
-            loadAlert('error', 'Erro de conexão.');
+            loadAlert('error', getErrorMessage (error));
         }
     }
 

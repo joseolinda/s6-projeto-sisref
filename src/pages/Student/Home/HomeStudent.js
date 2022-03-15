@@ -18,6 +18,7 @@ import Swal from "sweetalert2";
 import { DialogQuestione } from "../../../components";
 import Padding from '../../../components/Padding';
 import api from '../../../services/api';
+import { getErrorMessage } from '../../../helpers/error';
 
 
 
@@ -108,7 +109,7 @@ const HomeStudent = props => {
           const response = await api.get(url);
           setMenuToDay(response.data);
         } catch (error) {
-          loadAlert('error', 'Erro de conexão.');
+          loadAlert('error', getErrorMessage (error));
         }
       }
 
@@ -120,7 +121,7 @@ const HomeStudent = props => {
         setStudent(response.data);
         setdataV(response.data.dateValid);
       } catch (error) {
-        loadAlert('error', 'Erro de conexão.');
+        loadAlert('error', getErrorMessage (error));
       }
     }
 
@@ -160,7 +161,7 @@ const HomeStudent = props => {
           loadAlert('success', 'Reserva registrada.');
         }
       } catch (error) {
-        loadAlert('error', 'Erro de conexão.');
+        loadAlert('error', getErrorMessage (error));
       }
       setOpen(false);
       loadMenutoDay();

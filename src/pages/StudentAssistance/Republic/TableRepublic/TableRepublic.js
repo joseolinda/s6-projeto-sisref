@@ -29,6 +29,7 @@ import PropTypes from "prop-types";
 import { withRouter } from 'react-router-dom';
 import RepublicToolbar from "./components/RepublicToolbar";
 import StudentsRepublic from "./components/StudentsRepublic";
+import { getErrorMessage } from '../../../../helpers/error';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -122,7 +123,7 @@ const TableRepublic = props => {
       setTotal(response.data.total);
       setRepublics(response.data.data);
     } catch (error) {
-      loadAlert('error', 'Erro de conexão.');
+      loadAlert('error', getErrorMessage (error));
     }
     setLoading(false);
   }

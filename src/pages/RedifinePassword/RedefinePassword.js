@@ -12,7 +12,7 @@ import {
 import api from '../../services/api';
 import Swal from 'sweetalert2';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-
+import {getErrorMessage} from "../../helpers/error";
 const schema = {
   email: {
     presence: {allowEmpty: false, message: 'O e-mail é obrigatório.'},
@@ -160,7 +160,7 @@ const RedefinePassword = props => {
         history.push('/');
       }
     } catch (error) {
-      loadAlert('error', 'Erro de conexão.');
+      loadAlert('error', getErrorMessage (error));
     }
   }
 

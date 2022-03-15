@@ -20,6 +20,7 @@ import PropTypes from "prop-types";
 import { withRouter } from 'react-router-dom';
 import StudentToolbar from "./components/StudentToolbar";
 import StudentRow from "./components/StudentRow";
+import { getErrorMessage } from '../../../../helpers/error';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -109,7 +110,7 @@ const TableStudent = props => {
       setStudents(response.data.data);
     } catch (error) {
       console.log(error);
-      loadAlert('error', 'Erro de conexão.');
+      loadAlert('error', getErrorMessage (error));
     }
     setLoading(false);
   }
@@ -172,7 +173,7 @@ const TableStudent = props => {
       }
     } catch (error) {
       console.log(error);
-      loadAlert('error', 'Erro de conexão.');
+      loadAlert('error', getErrorMessage (error));
     }
     setOpen(false);
   }
