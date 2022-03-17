@@ -40,6 +40,12 @@ const StudentToolbar = props => {
     history.push('/student-details');
   }
 
+  function onPressEnter (event){
+    if (event.key == "Enter"){
+      onClickSearch ();
+    }
+   }
+
   return (
     <div
       {...rest}
@@ -68,6 +74,7 @@ const StudentToolbar = props => {
           placeholder="Pesquisar por nome, matrícula ou código"
           onChange={onChangeSearch}
           value={searchText}
+          onKeyPress={onPressEnter}
         />
         <Tooltip title="Pesquisar">
           <Button

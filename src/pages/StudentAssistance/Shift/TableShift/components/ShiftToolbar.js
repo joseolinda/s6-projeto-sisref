@@ -35,6 +35,12 @@ const ShiftToolbar = props => {
 
   const classes = useStyles();
 
+  function onPressEnter (event){
+   if (event.key == "Enter"){
+     onClickSearch ();
+   }
+  }
+
   const onClickHandleCampus = () => {
     history.push('/shift-details');
   }
@@ -54,6 +60,7 @@ const ShiftToolbar = props => {
           className={classes.searchInput}
           placeholder="Pesquisar"
           onChange={onChangeSearch}
+          onKeyPress={onPressEnter}
           value={searchText}
         />
         <Tooltip title="Pesquisar">

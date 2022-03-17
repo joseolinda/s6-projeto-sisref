@@ -39,6 +39,12 @@ const RepublicToolbar = props => {
     history.push('/republic-details');
   }
 
+  function onPressEnter (event){
+    if (event.key == "Enter"){
+      onClickSearch ();
+    }
+   }
+
   return (
     <div
       {...rest}
@@ -55,6 +61,7 @@ const RepublicToolbar = props => {
           placeholder="Pesquisar"
           onChange={onChangeSearch}
           value={searchText}
+          onKeyPress={onPressEnter}
         />
          <Tooltip title="Pesquisar">
           <Button

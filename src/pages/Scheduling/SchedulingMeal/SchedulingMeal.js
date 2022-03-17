@@ -267,6 +267,12 @@ const SchedulingMeal = props =>{
         loadStudent();
     };
 
+    function onPressEnter (event){
+        if (event.key == "Enter"){
+          onClickSearch ();
+        }
+       }
+
     return(
         <div>
             <div className={classes.contentHeader}>
@@ -344,6 +350,7 @@ const SchedulingMeal = props =>{
                         margin="dense"
                         name="mat"
                         onChange={handleChange}
+                        onKeyPress={onPressEnter}
                         InputLabelProps={{
                             shrink: true,
                         }}
