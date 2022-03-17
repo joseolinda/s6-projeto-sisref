@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import api from "../../services/api";
 import PropTypes from 'prop-types';
 import validate from 'validate.js';
@@ -63,6 +63,8 @@ const SignIn = props => {
   const timer = React.useRef();
 
   const classes = useStyles();
+  const campoSenha = useRef();
+
 
   const [formState, setFormState] = useState({
     isValid: false,
@@ -160,6 +162,14 @@ const SignIn = props => {
   const hasError = field =>
     formState.touched[field] && formState.errors[field] ? true : false;
 
+  function onPressEnter (event){
+    if (event.key == "Enter"){
+      if  (campoSenha.current){
+        campoSenha.current.focus ();
+      }
+    }
+  }
+
     return (
       <Container component="main" maxWidth="xs">
         <CssBaseline />
@@ -179,10 +189,12 @@ const SignIn = props => {
               label="Email"
               name="email"
               onChange={handleChange}
+              onKeyPress={onPressEnter}
               type="text"
               value={formState.values.email || ''}
               variant="outlined"
               margin="normal"
+              autoFocus
             />
             <TextField
               className={classes.textField}
@@ -198,6 +210,7 @@ const SignIn = props => {
               value={formState.values.password || ''}
               variant="outlined"
               margin="normal"
+              inputRef={campoSenha}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
