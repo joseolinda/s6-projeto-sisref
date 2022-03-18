@@ -173,14 +173,22 @@ const TableMeal = props => {
   const onClickEdit = (id) => {
     history.push('/meal-details/'+id);
   }
-
+  function onPressEnter (event){
+    if (event.key == "Enter"){
+      onClickSearch ();
+    }
+  }
   return (
     <div>
       <div className={classes.root}>
       <MealToolbar
           onChangeSearch={updateSearch.bind(this)}
           searchText={searchText}
-          onClickSearch={onClickSearch}/>
+          onClickSearch={onClickSearch}
+          onKeyPress={onPressEnter}
+      
+      />
+          
       <div className={classes.content}>
         <Card
             className={clsx(classes.root, className)}>

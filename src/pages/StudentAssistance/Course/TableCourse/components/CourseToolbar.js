@@ -39,6 +39,12 @@ const CourseToolbar = props => {
     history.push('/course-details');
   }
 
+  function onPressEnter (event){
+    if (event.key == "Enter"){
+      onClickSearch ();
+    }
+   }
+
   return (
     <div
       {...rest}
@@ -55,6 +61,7 @@ const CourseToolbar = props => {
           placeholder="Pesquisar por sigla ou descrição"
           onChange={onChangeSearch}
           value={searchText}
+          onKeyPress={onPressEnter}
         />
         <Tooltip title="Pesquisar">
           <Button
