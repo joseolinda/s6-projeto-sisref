@@ -6,13 +6,13 @@ import {
   TableContainer,
   TableBody, Paper, Table, TableHead, TableRow,
   TableCell,
-  IconButton, Button, Grid, Typography, Tooltip, Dialog,
+  IconButton, Button, Grid, Typography, Tooltip, Dialog, DialogActions, DialogTitle, DialogContent,
   AppBar, Toolbar, FormControlLabel, Checkbox, TextField
 } from '@material-ui/core';
 import api from "../../../../services/api";
 import Swal from "sweetalert2";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import { Done, Close } from "@material-ui/icons";
+import { Done, Close, AddComment } from "@material-ui/icons";
 import Edit from "@material-ui/icons/Edit";
 import CloseIcon from '@material-ui/icons/Close';
 import Delete from "@material-ui/icons/Delete";
@@ -67,6 +67,9 @@ const StudentAllowMeal = props => {
   const [allowMeals, setAllowMeals] = useState([]);
   const [open, setOpen] = React.useState(false);
   const [meals, setMeals] = React.useState([]);
+
+  const [commentDialogOpen, setCommentDialogOpen] = useState(false);
+  const [commentText, setCommentText] = useState("");
 
   const classes = useStyles();
 
@@ -260,6 +263,15 @@ const StudentAllowMeal = props => {
     setOpen(false);
   };
 
+  const handleCloseCommentDialog = () => {
+    setCommentDialogOpen(false);
+  };
+
+  const handleSaveComment = () => {
+    setCommentDialogOpen(false);
+    setCommentText("");
+  }
+
   const handleSaveAllowMeal = () => {
     setOpen(false);
     if(formState.values.meal_id == null){
@@ -345,6 +357,11 @@ const StudentAllowMeal = props => {
                           <Edit fontSize="medium"/>
                         </Button>
                       </Tooltip>
+                      <Tooltip title="Adicionar comentário">
+                        <Button onClick={() => setCommentDialogOpen(true)}>
+                          <AddComment fontSize='medium'/>
+                        </Button>
+                      </Tooltip>
                     </TableCell>
 
                     { result.monday == 1 ?
@@ -401,7 +418,7 @@ const StudentAllowMeal = props => {
           </Table>
         </TableContainer>
         {/*DIALOG*/}
-        <Dialog fullScreen open={open} onClose={handleClose}>
+        <Dialog fullScreen open={open} onClose={handleClose}>  
           <AppBar className={classes.appBar}>
             <Toolbar>
               <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
@@ -502,6 +519,22 @@ const StudentAllowMeal = props => {
               }
               label="Sábado"
           />
+        </Dialog> 
+        <Dialog open={commentDialogOpen} onClose={handleCloseCommentDialog}>
+          <DialogTitle>Comentário de refeição</DialogTitle>
+          <DialogContent>
+            <TextField
+              fullWidth
+              placeholder='Digite seu comentário'
+              multiline
+              rows={4}
+              value={commentText}
+              onChange={(event) => setCommentText(event.currentTarget.value)}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick= {handleSaveComment}>Salvar</Button>
+          </DialogActions>
         </Dialog>
       </div>
   );
