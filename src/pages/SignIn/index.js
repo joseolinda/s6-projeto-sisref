@@ -192,7 +192,12 @@ const SignIn = props => {
               className={classes.infoRedefinicao}
               onClose = {handleCloseRedefinitionAlert} 
             >
-              Você agora pode definir uma senha própria! Basta acessar "Redefina aqui".
+              <p>Você agora pode definir uma senha própria! Basta:</p>
+              <ul>
+                <li>Acessar <em>"Esqueceu sua senha? Redefina aqui".</em></li>
+                <li>Inserir seu e-mail</li>
+                <li>Acessar o link de redefinição que será enviado</li>
+              </ul>
             </Alert>
           )}
           <form onSubmit={handleSignIn} className={classes.form} noValidate>
