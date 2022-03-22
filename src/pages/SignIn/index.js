@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import api from "../../services/api";
 import PropTypes from 'prop-types';
 import validate from 'validate.js';
-import { loginToken } from "../../services/auth";
+import { isAuthenticated, LEVEL_USER, loginToken } from "../../services/auth";
 import { Link as RouterLink, withRouter } from "react-router-dom";
 import Swal from 'sweetalert2';
 import Alert from '@material-ui/lab/Alert';
@@ -61,6 +61,20 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+function redirecionarUsuarioPeloTipo(history, tipo) {
+  if(tipo == "ADMIN"){
+    history.push('/user');
+  } else if(tipo == "ASSIS_ESTU"){
+    history.push('/student');
+  } else if(tipo == "RECEPCAO"){
+    history.push('/confirm-meals');
+  } else if(tipo == "NUTRI"){
+    history.push('/menu');
+  }else{
+    history.push('/page-student');
+  }
+}
+
 const SignIn = props => {
   const { history } = props;
   const timer = React.useRef();
@@ -85,6 +99,16 @@ const SignIn = props => {
       errors: errors || {}
     }));
   },[formState.values]);
+  
+  useEffect(function () {
+    if (isAuthenticated()) {
+      const levelUser = localStorage.getItem(LEVEL_USER);
+
+      if (levelUser !== null) {
+        redirecionarUsuarioPeloTipo(history, levelUser);
+      }
+    }
+  }, []);
 
   const handleChange = event => {
     event.persist();
@@ -141,17 +165,7 @@ const SignIn = props => {
           response.data.classfication, response.data.active,
           response.data.campus, response.data.id);
 
-        if(response.data.classfication == "ADMIN"){
-          history.push('/user');
-        } else if(response.data.classfication == "ASSIS_ESTU"){
-          history.push('/student');
-        } else if(response.data.classfication == "RECEPCAO"){
-          history.push('/confirm-meals');
-        } else if(response.data.classfication == "NUTRI"){
-          history.push('/menu');
-        }else{
-          history.push('/page-student');
-        }
+        redirecionarUsuarioPeloTipo(history, response.data.classfication);
       }else {
         if(response.data.message){
           loadAlert('error', response.data.message);
