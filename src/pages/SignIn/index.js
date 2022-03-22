@@ -5,7 +5,7 @@ import validate from 'validate.js';
 import { loginToken } from "../../services/auth";
 import { Link as RouterLink, withRouter } from "react-router-dom";
 import Swal from 'sweetalert2';
-import Avatar from '@material-ui/core/Avatar';
+import Alert from '@material-ui/lab/Alert';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -56,12 +56,15 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  infoRedefinicao: {
+    marginTop: theme.spacing(3),
+  }
 }));
 
 const SignIn = props => {
   const { history } = props;
   const timer = React.useRef();
-
+  const [showMessage, setShowMessage] = useState(() => localStorage.getItem('redefinition_alert') === null);
   const classes = useStyles();
   const campoSenha = useRef();
 
@@ -170,14 +173,28 @@ const SignIn = props => {
     }
   }
 
+  const handleCloseRedefinitionAlert = () => {
+    setShowMessage(false);
+    localStorage.setItem('redefinition_alert', '1');
+  };
+
     return (
-      <Container component="main" maxWidth="xs">
+      <Container maxWidth="xs">
         <CssBaseline />
         <div className={classes.paper}>
         <img
             alt="Logo"
             src={process.env.PUBLIC_URL + "/images/SISREF01.png"}
           />
+          {showMessage && (
+            <Alert
+              severity="info"
+              className={classes.infoRedefinicao}
+              onClose = {handleCloseRedefinitionAlert} 
+            >
+              Você agora pode definir uma senha própria! Basta acessar "Redefina aqui".
+            </Alert>
+          )}
           <form onSubmit={handleSignIn} className={classes.form} noValidate>
           <TextField
               className={classes.textField}
