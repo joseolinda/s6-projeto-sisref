@@ -12,7 +12,7 @@ import {
 import api from "../../../../services/api";
 import Swal from "sweetalert2";
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import { Done, Close, AddComment } from "@material-ui/icons";
+import { Done, Close, AddComment, Comment as EditComment } from "@material-ui/icons";
 import Edit from "@material-ui/icons/Edit";
 import CloseIcon from '@material-ui/icons/Close';
 import Delete from "@material-ui/icons/Delete";
@@ -267,9 +267,44 @@ const StudentAllowMeal = props => {
     setCommentDialogOpen(false);
   };
 
-  const handleSaveComment = () => {
-    setCommentDialogOpen(false);
-    setCommentText("");
+  function handleAddComment(idRefeicao, comentario) {
+    setFormState({
+      ...formState,
+      values: {
+        ...formState.values,
+        id: idRefeicao
+      }
+    });
+    setCommentDialogOpen(true);
+    setCommentText(comentario || '');
+  }
+
+  const handleSaveComment = async() => {
+    try {
+      const id = formState.values.id;
+      const refeicao = allowMeals.find((ref)=> ref.id === id);
+  
+      if (refeicao !== undefined) {
+        const data = {
+          ... refeicao, 
+          comentario: commentText
+        };
+        const response = await api.put("allowstudenmealday/" + refeicao.id, data);
+
+        if (response.status === 200) {
+          loadAllowMeal();
+          loadAlert('success', 'Comentário adicionado à permissão.');
+        } else {
+          if(response.data.message){
+            loadAlert('error', response.data.message);
+          }
+        }
+        setCommentDialogOpen(false);
+        setCommentText("");
+      }
+    } catch(error) {
+      loadAlert('error', getErrorMessage (error));
+    }
   }
 
   const handleSaveAllowMeal = () => {
@@ -357,9 +392,10 @@ const StudentAllowMeal = props => {
                           <Edit fontSize="medium"/>
                         </Button>
                       </Tooltip>
-                      <Tooltip title="Adicionar comentário">
-                        <Button onClick={() => setCommentDialogOpen(true)}>
-                          <AddComment fontSize='medium'/>
+                      <Tooltip title={(result.comentario ? "Editar": "Adicionar") + " comentário"}>
+                        <Button onClick={() => handleAddComment(result.id, result.comentario)}>
+                          
+                          {result.comentario ? <EditComment fontSize='medium'/> : <AddComment fontSize='medium'/>}
                         </Button>
                       </Tooltip>
                     </TableCell>
