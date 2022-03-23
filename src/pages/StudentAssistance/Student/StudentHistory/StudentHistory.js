@@ -11,7 +11,8 @@ import {
   TablePagination,
   TableBody, Typography, Table, Button, Tooltip, Dialog,
   DialogTitle, DialogContent, TextField, DialogActions, DialogContentText,
-  IconButton
+  IconButton,
+  FormControl, InputLabel, Select, MenuItem
 } from '@material-ui/core';
 import {DialogQuestione} from "../../../../components";
 import api from "../../../../services/api";
@@ -75,6 +76,8 @@ const StudentHistory = props => {
                           absenceJustification: ''
                         });
 
+  const [filtroHistorico, setFiltroHistorico] = useState('all');
+
   const classes = useStyles();
 
   //configuration alert
@@ -99,7 +102,7 @@ const StudentHistory = props => {
 
   async function loadHistoryStudent(page){
     try {
-      const url = 'student/history/'+idStudent+'?page='+page;
+      const url = 'student/history/'+idStudent+'?page='+page+'&filter=' + filtroHistorico;
       const response = await api.get(url);
       if (response.status === 200) {
         if(response.data.message){
@@ -118,8 +121,7 @@ const StudentHistory = props => {
     if(idStudent){
       loadHistoryStudent();
     }
-  }, []);
-
+  }, [filtroHistorico]);
 
 
   const handleBack = () => {
@@ -213,7 +215,7 @@ const StudentHistory = props => {
           loadAlert('error', response.data.message);
         }
       } else {
-        loadAlert('success', 'Agendamento excluido excluído.');
+        loadAlert('success', 'Agendamento excluído.');
         loadHistoryStudent(page+1);
       }
     } catch (error) {
@@ -233,10 +235,21 @@ const StudentHistory = props => {
             className={clsx(classes.root, className)}>
           <CardHeader
               avatar={
-                <div>
-
-
-                </div>
+                <FormControl variant="outlined">
+                  <InputLabel id="demo-simple-select-outlined-label">Filtro</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-outlined-label"
+                    id="demo-simple-select-outlined"
+                    value={filtroHistorico}
+                    onChange={(event) => setFiltroHistorico(event.target.value)}
+                    label="Filtro"
+                  >
+                    <MenuItem value="all">Todos</MenuItem>
+                    <MenuItem value="present">Presente</MenuItem>
+                    <MenuItem value="justified">Justificado</MenuItem>
+                    <MenuItem value="absent">Ausente</MenuItem>
+                  </Select>
+                </FormControl>
               }
               action={
                 <TablePagination
@@ -308,7 +321,7 @@ const StudentHistory = props => {
                                     { result.canceled_by_student ==1 ?
                                         <span className={classes.infoNull}>Cancelado</span>
                                         :
-                                        result.wasPresent == 1 || true?
+                                        result.wasPresent == 1 ?
                                             <span className={classes.infoGreen}>Presente</span>
                                             : result.absenceJustification != null ?
                                               <span className={classes.infoOrange}>Justificado</span>
