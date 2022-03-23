@@ -2,10 +2,10 @@ import React, { useState, useEffect, useRef } from 'react';
 import api from "../../services/api";
 import PropTypes from 'prop-types';
 import validate from 'validate.js';
-import { loginToken } from "../../services/auth";
+import { isAuthenticated, LEVEL_USER, loginToken } from "../../services/auth";
 import { Link as RouterLink, withRouter } from "react-router-dom";
 import Swal from 'sweetalert2';
-import Avatar from '@material-ui/core/Avatar';
+import Alert from '@material-ui/lab/Alert';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -56,12 +56,29 @@ const useStyles = makeStyles((theme) => ({
   submit: {
     margin: theme.spacing(3, 0, 2),
   },
+  infoRedefinicao: {
+    marginTop: theme.spacing(3),
+  }
 }));
+
+function redirecionarUsuarioPeloTipo(history, tipo) {
+  if(tipo == "ADMIN"){
+    history.push('/user');
+  } else if(tipo == "ASSIS_ESTU"){
+    history.push('/student');
+  } else if(tipo == "RECEPCAO"){
+    history.push('/confirm-meals');
+  } else if(tipo == "NUTRI"){
+    history.push('/menu');
+  }else{
+    history.push('/page-student');
+  }
+}
 
 const SignIn = props => {
   const { history } = props;
   const timer = React.useRef();
-
+  const [showMessage, setShowMessage] = useState(() => localStorage.getItem('redefinition_alert') === null);
   const classes = useStyles();
   const campoSenha = useRef();
 
@@ -82,6 +99,16 @@ const SignIn = props => {
       errors: errors || {}
     }));
   },[formState.values]);
+  
+  useEffect(function () {
+    if (isAuthenticated()) {
+      const levelUser = localStorage.getItem(LEVEL_USER);
+
+      if (levelUser !== null) {
+        redirecionarUsuarioPeloTipo(history, levelUser);
+      }
+    }
+  }, []);
 
   const handleChange = event => {
     event.persist();
@@ -138,17 +165,7 @@ const SignIn = props => {
           response.data.classfication, response.data.active,
           response.data.campus, response.data.id);
 
-        if(response.data.classfication == "ADMIN"){
-          history.push('/user');
-        } else if(response.data.classfication == "ASSIS_ESTU"){
-          history.push('/student');
-        } else if(response.data.classfication == "RECEPCAO"){
-          history.push('/confirm-meals');
-        } else if(response.data.classfication == "NUTRI"){
-          history.push('/menu');
-        }else{
-          history.push('/page-student');
-        }
+        redirecionarUsuarioPeloTipo(history, response.data.classfication);
       }else {
         if(response.data.message){
           loadAlert('error', response.data.message);
@@ -170,14 +187,33 @@ const SignIn = props => {
     }
   }
 
+  const handleCloseRedefinitionAlert = () => {
+    setShowMessage(false);
+    localStorage.setItem('redefinition_alert', '1');
+  };
+
     return (
-      <Container component="main" maxWidth="xs">
+      <Container maxWidth="xs">
         <CssBaseline />
         <div className={classes.paper}>
         <img
             alt="Logo"
             src={process.env.PUBLIC_URL + "/images/SISREF01.png"}
           />
+          {showMessage && (
+            <Alert
+              severity="info"
+              className={classes.infoRedefinicao}
+              onClose = {handleCloseRedefinitionAlert} 
+            >
+              <p>Você agora pode definir uma senha própria! Basta:</p>
+              <ul>
+                <li>Acessar <em>"Esqueceu sua senha? Redefina aqui".</em></li>
+                <li>Inserir seu e-mail</li>
+                <li>Acessar o link de redefinição que será enviado</li>
+              </ul>
+            </Alert>
+          )}
           <form onSubmit={handleSignIn} className={classes.form} noValidate>
           <TextField
               className={classes.textField}
