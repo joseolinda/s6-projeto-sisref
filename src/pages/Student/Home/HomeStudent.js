@@ -8,6 +8,7 @@ import BlockIcon from '@material-ui/icons/Block';
 import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import ConfirmationNumberIcon from '@material-ui/icons/ConfirmationNumber';
 import ScheduleIcon from '@material-ui/icons/Schedule';
+import ScheduleTimeIcon from '@material-ui/icons/Timelapse';
 import { makeStyles } from '@material-ui/styles';
 import * as moment from 'moment';
 import 'moment/locale/pt-br';
@@ -19,6 +20,7 @@ import { DialogQuestione } from "../../../components";
 import Padding from '../../../components/Padding';
 import api from '../../../services/api';
 import { getErrorMessage } from '../../../helpers/error';
+import Alert from '@material-ui/lab/Alert';
 
 
 
@@ -68,7 +70,21 @@ const useStyles = makeStyles(theme => ({
     searchInput: {
       marginRight: theme.spacing(1)
     },
+    newsAlert: {
+      marginBlock: theme.spacing(2)
+    }
   }));
+
+function getReservationTime(meal){
+
+  const partes = meal.timeStart.split(":").slice(0,2);
+  const horas = partes[0];
+  const minutos = partes[1];
+  const horasInicioReserva = (horas - meal.qtdTimeReservationStart).toString().padStart(2, '0');
+  const horasFimReserva = (horas - meal.qtdTimeReservationEnd).toString().padStart(2, '0');
+
+  return `${horasInicioReserva}:${minutos} - ${horasFimReserva}:${minutos}`;
+}
 
 const HomeStudent = props => {
     const { className, onClickSearch, menu, history, ...rest } = props;
@@ -80,6 +96,8 @@ const HomeStudent = props => {
     const [open, setOpen] = React.useState(false);
     const [idMealRegister, setIdMealRegister] = React.useState(0);
     const [searchText, setSearchText] = React.useState('');
+
+    const [showNewsAlert, setShowNewsAlert] = useState(() => localStorage.getItem('news_alert') === null);
 
 
     //configuration alert
@@ -165,6 +183,11 @@ const HomeStudent = props => {
       }
       setOpen(false);
       loadMenutoDay();
+    }
+
+    function handleCloseNewsAlert() {
+      setShowNewsAlert(false);
+      localStorage.setItem('news_alert', '1');
     }
 
     const onClickOpenDialog = (id) => {
@@ -291,6 +314,7 @@ const HomeStudent = props => {
             </Card>
           </Grid>
         </Grid>
+        {showNewsAlert && <Alert severity='info' className={classes.newsAlert} onClose={handleCloseNewsAlert}>Você agora pode ver os horários de reserva das refeições!</Alert>}
         <Grid container spacing={3}>
           <Grid item md={12} xs={12}>
             <Card className={classes.root}>
@@ -331,40 +355,39 @@ const HomeStudent = props => {
                             <ScheduleIcon /> {result.meal.timeStart} -{" "}
                             {result.meal.timeEnd}
                           </Typography>
-                          {!result.agendado && !result.permission && (
-                            <Box sx={{ mt: 1 }}>
-                              <Chip
-                                icon={<BlockIcon />}
-                                label="Reserva não permitida."
-                                color="secondary"
-                              />
-                            </Box>
-                          )}
+                          <Typography>
+                            <ScheduleTimeIcon /> {getReservationTime(result.meal)}
+                          </Typography>
+                          <Box sx={{ mt: 1 }}>
+                            {result.agendado ? (
+                                <Chip
+                                  icon={<CheckCircleOutlineIcon />}
+                                  label="Já reservado."
+                                  color="primary"
+                                />
+                            ) : result.permission === 1 ? (
+                                <Tooltip title="Fazer reservar">
+                                  <Button
+                                    variant="outlined"
+                                    startIcon={<AlarmOnIcon fontSize="large" />}
+                                    aria-label="Reservar"
+                                    onClick={() => onClickOpenDialog(result.meal.id)}
+                                  >
+                                    Reservar
+                                  </Button>
+                                </Tooltip>
+                            ) : (
+                              
+                                <Chip
+                                  icon={<BlockIcon />}
+                                  label="Reserva não permitida."
+                                  color="secondary"
+                                />
+                            )}
+                          </Box>
                         </React.Fragment>
                       }
                     />
-                    {result.agendado ? (
-                        <ListItem>
-                          <Chip
-                            icon={<CheckCircleOutlineIcon />}
-                            label="Já reservado."
-                            color="primary"
-                          />
-                        </ListItem>
-                      ) : result.permission === 1 && (
-                        <ListItem>
-                          <Tooltip title="Fazer reservar">
-                            <Button
-                              variant="outlined"
-                              startIcon={<AlarmOnIcon fontSize="large" />}
-                              aria-label="Reservar"
-                              onClick={() => onClickOpenDialog(result.meal.id)}
-                            >
-                              Reservar
-                            </Button>
-                          </Tooltip>
-                        </ListItem>
-                      )}
                     <Divider light={true}></Divider>
                   </ListItem>
                 ))}

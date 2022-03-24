@@ -12,7 +12,8 @@ import {
   TableBody, Typography, Table, Button, Tooltip, Dialog,
   DialogTitle, DialogContent, TextField, DialogActions, DialogContentText,
   IconButton,
-  FormControl, InputLabel, Select, MenuItem
+  FormControl, InputLabel, Select, MenuItem,
+  Hidden
 } from '@material-ui/core';
 import {DialogQuestione} from "../../../../components";
 import api from "../../../../services/api";
@@ -59,6 +60,9 @@ const useStyles = makeStyles(() => ({
     textAlign: 'center',
     borderRadius: 4
   },
+  head: {
+    '& > *': { maxWidth: '100%' }
+  }
 }));
 
 const StudentHistory = props => {
@@ -284,7 +288,7 @@ const StudentHistory = props => {
                                   <Typography variant="caption" color="textPrimary" >
                                     {'Código do agendamento: '+result.id }
                                   </Typography>
-                                  <Typography variant="body1" color="textPrimary" >
+                                  <Typography variant="body1" color="textPrimary">
                                     {'Aluno: '+result.student.mat+' - '+ result.student.name}
                                   </Typography>
                                   <Typography variant="body1" color="textPrimary" >
@@ -296,7 +300,7 @@ const StudentHistory = props => {
                                 </div>
                               }
                               action={
-                                <div>
+                                <Hidden smDown>
                                   <Grid
                                       container
                                       direction="row"
@@ -328,8 +332,41 @@ const StudentHistory = props => {
                                             : <span className={classes.infoRed}>Ausente</span>
                                         }
                                   </Grid>
-                                </div>
+                                </Hidden>
                               }/>
+                              <Hidden mdUp>
+                                <Grid
+                                    container
+                                    direction="row"
+                                    justify="center"
+                                    alignItems="center">
+                                      <Tooltip title="Excluir">
+                                      <Button
+                                        className={classes.buttonDelete}
+                                        onClick={() => onClickOpenDialog(result.id)}>
+                                        <Delete fontSize="medium"/>
+                                      </Button>
+                                    </Tooltip>
+                                  { result.wasPresent != 1 &&
+                                  result.canceled_by_student == 0 ?
+                                    <Tooltip title="Justificar a ausência do estudante">
+                                      <Button
+                                        onClick={() => handleClickOpen(result.id)}>
+                                        <AddComment fontSize="medium"/>
+                                      </Button>
+                                    </Tooltip>
+                                  : null }
+                                  { result.canceled_by_student ==1 ?
+                                      <span className={classes.infoNull}>Cancelado</span>
+                                      :
+                                      result.wasPresent == 1 ?
+                                          <span className={classes.infoGreen}>Presente</span>
+                                          : result.absenceJustification != null ?
+                                            <span className={classes.infoOrange}>Justificado</span>
+                                          : <span className={classes.infoRed}>Ausente</span>
+                                      }
+                                </Grid>
+                              </Hidden>
                         </Card>
                     )) : null}
                   </TableBody>
