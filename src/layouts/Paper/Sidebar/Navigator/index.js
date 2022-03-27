@@ -54,53 +54,61 @@ function Navigator(props) {
   const { classes, category, ...other } = props;
 
   return (
-          <React.Fragment key={category.id}>
-            <Link href={category.href} component="a">
-              <ListItem className={classes.categoryHeader}>
-                <ListItemText
-                  classes={{
-                    primary: classes.categoryHeaderPrimary,
-                  }}>
-                  {category.id}
-                </ListItemText>
-              </ListItem>
-            </Link>
-            {category.children.map(({ id: childId, href, icon, active }) => (
-                childId == "Sobre" ? 
-                <Link target="_blank" href={href}>  <ListItem
-                  key={childId}
-                  button
-                  className={clsx(classes.item, active && classes.itemActiveItem)}
-                  as={Link} to={href}>
-                    <ListItemIcon className={classes.itemIcon}>{icon}</ListItemIcon>
-                    <ListItemText
-                      classes={{
-                        primary: classes.itemPrimary,
-                      }}>
-                      {childId}
-                    </ListItemText>
-                  </ListItem>
-                </Link>
-                : 
-                <Link href={href}>
-                  <ListItem
-                    key={childId}
-                    button
-                    className={clsx(classes.item, active && classes.itemActiveItem)}
-                    as={Link} to={href}>
-                    <ListItemIcon className={classes.itemIcon}>{icon}</ListItemIcon>
-                    <ListItemText
-                      classes={{
-                        primary: classes.itemPrimary,
-                      }}>
-                      {childId}
-                    </ListItemText>
-                  </ListItem>
-                </Link>
-            ))}
+    <>
+      <Link href={category.href} component="a">
+        <ListItem className={classes.categoryHeader}>
+          <ListItemText
+            classes={{
+              primary: classes.categoryHeaderPrimary,
+            }}
+          >
+            {category.id}
+          </ListItemText>
+        </ListItem>
+      </Link>
+      {category.children.map(({ id: childId, href, icon, active }) =>
+        childId == "Sobre" ? (
+          <Link target="_blank" href={href} key={childId}>
+            {" "}
+            <ListItem
+              button
+              className={clsx(classes.item, active && classes.itemActiveItem)}
+              as={Link}
+              to={href}
+            >
+              <ListItemIcon className={classes.itemIcon}>{icon}</ListItemIcon>
+              <ListItemText
+                classes={{
+                  primary: classes.itemPrimary,
+                }}
+              >
+                {childId}
+              </ListItemText>
+            </ListItem>
+          </Link>
+        ) : (
+          <Link href={href} key={childId}>
+            <ListItem
+              button
+              className={clsx(classes.item, active && classes.itemActiveItem)}
+              as={Link}
+              to={href}
+            >
+              <ListItemIcon className={classes.itemIcon}>{icon}</ListItemIcon>
+              <ListItemText
+                classes={{
+                  primary: classes.itemPrimary,
+                }}
+              >
+                {childId}
+              </ListItemText>
+            </ListItem>
+          </Link>
+        )
+      )}
 
-            <Divider className={classes.divider} />
-          </React.Fragment>
+      <Divider className={classes.divider} />
+    </>
   );
 }
 
