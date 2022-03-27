@@ -15,7 +15,7 @@
 .DS_Store
 .env
 .env.*
-.env.pem
+*.pem
 .vscode
 
 npm-debug.log*
