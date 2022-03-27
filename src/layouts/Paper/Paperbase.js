@@ -1,13 +1,13 @@
 import React, { Children } from 'react';
 import PropTypes from 'prop-types';
-import { createMuiTheme, ThemeProvider, withStyles } from '@material-ui/core/styles';
+import { createTheme, ThemeProvider, withStyles } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Hidden from '@material-ui/core/Hidden';
 import Header from './Header';
 import Footer from '../components/Footer/index';
 import Sidebar from "./Sidebar";
 
-let theme = createMuiTheme({
+let theme = createTheme({
   palette: {
     primary: {
       light: '#63ccff',
