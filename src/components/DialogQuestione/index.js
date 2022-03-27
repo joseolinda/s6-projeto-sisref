@@ -38,7 +38,7 @@ const DialogQuestione = props => {
 
 DialogQuestione.propTypes = {
     handleClose: PropTypes.func,
-    open: PropTypes.object,
+    open: PropTypes.bool,
     onClickAgree: PropTypes.func,
     onClickDisagree: PropTypes.func,
     mesage: PropTypes.string,

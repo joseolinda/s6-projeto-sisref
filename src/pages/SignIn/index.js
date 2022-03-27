@@ -163,7 +163,7 @@ const SignIn = props => {
       if(response.status == 200){
         loginToken(response.data.access_token, response.data.name,
           response.data.classfication, response.data.active,
-          response.data.campus, response.data.id);
+          response.data.campus, response.data.id, response.data.expires_in);
 
         redirecionarUsuarioPeloTipo(history, response.data.classfication);
       }else {
