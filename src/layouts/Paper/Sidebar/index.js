@@ -26,6 +26,7 @@ import HomeWorkIcon from '@material-ui/icons/HomeWork';
 import PublicIcon from '@material-ui/icons/Public';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 import AssessmentIcon from '@material-ui/icons/Assessment';
+import DataUsageIcon from '@material-ui/icons/DataUsage';
 import Navigator from "./Navigator";
 import SchoolIcon from '@material-ui/icons/School';
 import ConfirmationNumberIcon from '@material-ui/icons/ConfirmationNumber';
@@ -67,6 +68,7 @@ const categoriesNutritionist = [
             { id: 'Refeições', href: '/meal', icon: <FastfoodIcon /> },
             { id: 'Relatório de refeições', href:'/nutri-meals-report', icon: <AssessmentIcon /> },
             { id: 'Quantidade de reservas', href:'/registered', icon: <ContactsIcon /> },
+            { id: 'Relatório de desperdício', href: '/nutri-waste-report', icon: <DataUsageIcon /> },
             { id: 'Sobre', href:'https://docs.google.com/document/d/1eIyVxD0hjBwFcsdJChhDHA7OHWIcdIojTLNTHqmPZiQ/edit?usp=sharing', icon: <LaunchIcon /> },
         ],
     },
@@ -179,67 +181,66 @@ const Sidebar = (props) => {
     },[level_user]);
 
     return (
-        <Drawer variant="permanent" {...other}>
-            <List disablePadding>
-                <ListItem className={clsx(classes.firebase, classes.item, classes.itemCategory)}>
-                    <Grid
-                        container
-                        direction="row"
-                        justify="center"
-                        alignItems="center">
-                        <Link
-                            component="a"
-                            href="https://www.ifce.edu.br/"
-                            target="_blank">
-                            <img
-                                alt="Logo"
-                                src="/images/LOGO-Horizontal.png"
-                            />
-                        </Link>
-                        <Typography
-                            variant="body1">
-                            {'Olá, '+name_user+'. Tudo bem?'}
-                        </Typography>
-                    </Grid>
-                </ListItem>
-                <ListItem className={clsx(classes.item, classes.itemCategory)}>
-                    <ListItemIcon className={classes.itemIcon}>
-                        <HomeIcon />
-                    </ListItemIcon>
-                    <ListItemText
-                        classes={{
-                            primary: classes.itemPrimary,
-                        }}>
-                        SisRef | Campus - {campus.description}
-                    </ListItemText>
-                </ListItem>
-                {
-                    level_user=="ADMIN" ?
-                        categoriesAdmin.map(result => (
-                            <Navigator category={result}/>
-                        ))
-                        :
-                        level_user=="ASSIS_ESTU" ?
-                            categoriesAssistenciaEstudantil.map(result => (
-                                <Navigator category={result}/>
-                            ))
-                            :
-                            level_user=="RECEPCAO" ?
-                            categoriesReception.map(result => (
-                                <Navigator category={result}/>
-                            ))
-                            :
-                            level_user=="NUTRI" ?
-                            categoriesNutritionist.map(result => (
-                                <Navigator category={result}/>
-                            ))
-                            :
-                            categoriesStudent.map(result => (
-                                <Navigator category={result}/>
-                            ))
-                }
-            </List>
-        </Drawer>
+      <Drawer variant="permanent" {...other}>
+        <List disablePadding>
+          <ListItem
+            className={clsx(
+              classes.firebase,
+              classes.item,
+              classes.itemCategory
+            )}
+          >
+            <Grid
+              container
+              direction="row"
+              justify="center"
+              alignItems="center"
+            >
+              <Link
+                component="a"
+                href="https://www.ifce.edu.br/"
+                target="_blank"
+              >
+                <img alt="Logo" src="/images/LOGO-Horizontal.png" />
+              </Link>
+              <Typography variant="body1">
+                {"Olá, " + name_user + ". Tudo bem?"}
+              </Typography>
+            </Grid>
+          </ListItem>
+          <ListItem className={clsx(classes.item, classes.itemCategory)}>
+            <ListItemIcon className={classes.itemIcon}>
+              <HomeIcon />
+            </ListItemIcon>
+            <ListItemText
+              classes={{
+                primary: classes.itemPrimary,
+              }}
+            >
+              SisRef | Campus - {campus.description}
+            </ListItemText>
+          </ListItem>
+          {level_user === "ADMIN"
+            ? categoriesAdmin.map((result) => (
+                <Navigator key={result.id} category={result} />
+              ))
+            : level_user === "ASSIS_ESTU"
+            ? categoriesAssistenciaEstudantil.map((result) => (
+                <Navigator key={result.id} category={result} />
+              ))
+            : level_user === "RECEPCAO"
+            ? categoriesReception.map((result) => (
+                <Navigator key={result.id} category={result} />
+              ))
+            : level_user === "NUTRI"
+            ? categoriesNutritionist.map((result) => (
+                <Navigator key={result.id} category={result} />
+              ))
+            : categoriesStudent.map((result) => (
+                <Navigator key={result.id} category={result} />
+              ))}
+        </List>
+      </Drawer>
     );
 }
 
