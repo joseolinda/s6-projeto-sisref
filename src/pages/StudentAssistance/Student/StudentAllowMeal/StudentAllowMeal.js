@@ -557,7 +557,7 @@ const StudentAllowMeal = props => {
           />
         </Dialog> 
         <Dialog open={commentDialogOpen} onClose={handleCloseCommentDialog}>
-          <DialogTitle>Comentário de refeição</DialogTitle>
+          <DialogTitle>Comentário de permissão</DialogTitle>
           <DialogContent>
             <TextField
               fullWidth

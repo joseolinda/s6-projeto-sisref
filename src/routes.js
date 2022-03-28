@@ -38,6 +38,8 @@ import InformationStudent from './pages/Student/Information/InformationStudent';
 import TicketStudent from './pages/Student/Ticket/Ticket';
 import RegisteredMeals from './pages/Nutritionist/RegisteredMeals';
 import ReportPrint from './pages/Report/ReportPrint';
+import ReportWaste from "./pages/Report/ReportWaste";
+
 
 const BASENAME = new URL(process.env.PUBLIC_URL ?? "/", window.location.href).pathname;
 
@@ -318,6 +320,13 @@ const BASENAME = new URL(process.env.PUBLIC_URL ?? "/", window.location.href).pa
             needToBeLogged={true}
             typeUser="NUTRI"
             path="/report-prints"/> 
+        <RouteWithLayout
+            component={ReportWaste}
+            exact
+            layout={Paperbase}
+            needToBeLogged={true}
+            typeUser="NUTRI"
+            path="/nutri-waste-report"/>
         {/*ROTAS DA RECEPCÕA*/}
         <RouteWithLayout
             component={Admin}
