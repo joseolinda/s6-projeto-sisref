@@ -1,6 +1,25 @@
 import {
-  Box, Button, Card, CardContent, CardHeader, CardMedia, Chip, Divider, Grid, List,
-  ListItem, ListItemAvatar, ListItemText, TextField, Tooltip, Typography
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  CardMedia,
+  Chip,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Divider,
+  Grid,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
+  TextField,
+  Tooltip,
+  Typography
 } from '@material-ui/core';
 import { green } from '@material-ui/core/colors';
 import AlarmOnIcon from '@material-ui/icons/AlarmOn';
@@ -9,6 +28,7 @@ import CheckCircleOutlineIcon from '@material-ui/icons/CheckCircleOutline';
 import ConfirmationNumberIcon from '@material-ui/icons/ConfirmationNumber';
 import ScheduleIcon from '@material-ui/icons/Schedule';
 import ScheduleTimeIcon from '@material-ui/icons/Timelapse';
+import Alert from '@material-ui/lab/Alert';
 import { makeStyles } from '@material-ui/styles';
 import * as moment from 'moment';
 import 'moment/locale/pt-br';
@@ -18,9 +38,8 @@ import { withRouter } from "react-router-dom";
 import Swal from "sweetalert2";
 import { DialogQuestione } from "../../../components";
 import Padding from '../../../components/Padding';
-import api from '../../../services/api';
 import { getErrorMessage } from '../../../helpers/error';
-import Alert from '@material-ui/lab/Alert';
+import api from '../../../services/api';
 
 
 
@@ -72,6 +91,11 @@ const useStyles = makeStyles(theme => ({
     },
     newsAlert: {
       marginBlock: theme.spacing(2)
+    },
+    wasteReportDescription: {
+      '& > *': {
+        maxWidth: '100%'
+      }
     }
   }));
 
@@ -98,6 +122,9 @@ const HomeStudent = props => {
     const [searchText, setSearchText] = React.useState('');
 
     const [showNewsAlert, setShowNewsAlert] = useState(() => localStorage.getItem('news_alert') === null);
+    
+    const [monthWasteReport, setMonthWasteReport] = useState(null);
+    const [lastSeenWasteReport, setLastSeenWasteReport] = useState(() => localStorage.getItem('last_seen_waste_report'));
 
 
     //configuration alert
@@ -143,6 +170,39 @@ const HomeStudent = props => {
       }
     }
 
+    const isRepeatedWasteReport = () => {
+      if (lastSeenWasteReport) {
+        const lastSeenWasteReportDate = new Date(lastSeenWasteReport);
+
+        return lastSeenWasteReportDate.getMonth() === new Date().getMonth();
+      }
+
+      return false;
+    }
+
+    async function loadMonthWasteReport() {
+      try {
+        const response = await api.get('/report/list-waste', {
+          params: {
+            date: dateNow()
+          }
+        });
+
+        if (response.status === 200) {
+          if (isRepeatedWasteReport()) {
+            if (!(new Date(response.data.updated_at) > new Date(lastSeenWasteReport))) {
+              return;
+            } else {
+              setLastSeenWasteReport(null);
+            }
+          }
+          setMonthWasteReport(response.data.content);
+        }
+      } catch (error) {
+
+      }
+    }
+
     function dateNow() {
       let data = new Date();
 
@@ -155,6 +215,7 @@ const HomeStudent = props => {
 
     useEffect(() => {
         loadStudent();
+        loadMonthWasteReport();
         setSearchText(dateNow());
     }, []);
 
@@ -183,6 +244,11 @@ const HomeStudent = props => {
       }
       setOpen(false);
       loadMenutoDay();
+    }
+
+    function handleCloseWasteReportDialog() {
+      setLastSeenWasteReport((new Date()).toISOString());
+      localStorage.setItem('last_seen_waste_report', (new Date()).toISOString());
     }
 
     function handleCloseNewsAlert() {
@@ -454,6 +520,24 @@ const HomeStudent = props => {
             </Card>
           </Grid>
         </Grid>
+        <Dialog
+          open={monthWasteReport && !isRepeatedWasteReport()}
+          onClose={handleCloseWasteReportDialog}
+          aria-labelledby="waste-report-dialog-title"
+          aria-describedby="waste-report-dialog-description"
+        >
+          <DialogTitle id="waste-report-dialog-title">Relatório de Desperdício Mensal</DialogTitle>
+          <DialogContent>
+            <DialogContentText id="waste-report-dialog-description">
+              <div dangerouslySetInnerHTML={{ __html: monthWasteReport }} className={classes.wasteReportDescription}></div>
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleCloseWasteReportDialog} color="primary" autoFocus>
+              Fechar
+            </Button>
+          </DialogActions>
+        </Dialog>
         <DialogQuestione
           handleClose={onClickCloseDialog}
           open={open}

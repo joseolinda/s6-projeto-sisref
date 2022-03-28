@@ -26,6 +26,7 @@ import HomeWorkIcon from '@material-ui/icons/HomeWork';
 import PublicIcon from '@material-ui/icons/Public';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 import AssessmentIcon from '@material-ui/icons/Assessment';
+import DataUsageIcon from '@material-ui/icons/DataUsage';
 import Navigator from "./Navigator";
 import SchoolIcon from '@material-ui/icons/School';
 import ConfirmationNumberIcon from '@material-ui/icons/ConfirmationNumber';
@@ -67,6 +68,7 @@ const categoriesNutritionist = [
             { id: 'Refeições', href: '/meal', icon: <FastfoodIcon /> },
             { id: 'Relatório de refeições', href:'/nutri-meals-report', icon: <AssessmentIcon /> },
             { id: 'Quantidade de reservas', href:'/registered', icon: <ContactsIcon /> },
+            { id: 'Relatório de desperdício', href: '/nutri-waste-report', icon: <DataUsageIcon /> },
             { id: 'Sobre', href:'https://docs.google.com/document/d/1eIyVxD0hjBwFcsdJChhDHA7OHWIcdIojTLNTHqmPZiQ/edit?usp=sharing', icon: <LaunchIcon /> },
         ],
     },
