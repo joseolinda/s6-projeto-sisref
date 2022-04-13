@@ -138,7 +138,7 @@ const StudentsRepublic = props => {
       let response= {};
       let acao = "";
 
-      response = await api.post('republic/item/', data);
+      response = await api.post('republic/item', data);
       acao = "Cadastrado";
       if (response.status === 200) {
         loadAlert('success', 'Estudante '+acao+'.');
