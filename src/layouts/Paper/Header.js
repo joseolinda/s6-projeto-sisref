@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { logout } from "../../services/auth";
 import Swal from "sweetalert2";
+import WatchLater from '@material-ui/icons/WatchLater';
 import AppBar from '@material-ui/core/AppBar';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -12,6 +13,7 @@ import IconButton from '@material-ui/core/IconButton';
 import Link from '@material-ui/core/Link';
 import MenuIcon from '@material-ui/icons/Menu';
 import NotificationsIcon from '@material-ui/icons/Notifications';
+import { spacing } from '@material-ui/system';
 import Tab from '@material-ui/core/Tab';
 import Tabs from '@material-ui/core/Tabs';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -50,6 +52,14 @@ const styles = (theme) => ({
 function Header(props) {
   const { classes, onDrawerToggle, history } = props;
 
+  const [dateState, setDateState] = useState(new Date());
+
+  useEffect(() => {
+		setInterval(() => {
+			setDateState(new Date());
+		}, 30000);
+	}, []);
+
   const handleLogout = e => Swal.fire({
     title: 'Deseja Sair ?',
     showCancelButton: true,
@@ -81,6 +91,36 @@ function Header(props) {
                 </IconButton>
               </Grid>
             </Hidden>
+            <span className='realTimeClock'>
+              <WatchLater fontSize="medium" style={{ marginRight: "10px", animation: 'spin 20s infinite linear'  }} />
+              <style>
+                {`
+                    @keyframes spin {
+                        0% { transform: rotate(0deg); }
+                        100% { transform: rotate(360deg); }
+                    }
+                    .realTimeClock {
+                      background: rgba(255,255,255,0.2);
+                      padding: 6px 60px 6px 10px;
+                      border-radius: 4px;
+                      font-size: 1.1rem;
+                      margin-left: -10px;
+                    }
+                    .realTimeClock span {
+                      display: inline-block;
+                      position: absolute  ;
+                      margin-top: 3px;
+                    }
+                `}
+              </style>
+              <span>
+                {dateState.toLocaleString('pt-br', {
+                  hour: '2-digit',
+                  minute: '2-digit',
+                  hour12: false,
+                })}
+              </span>
+        </span>
             <Grid item xs />
             <Grid item>
             <Tooltip title="Sair" >
